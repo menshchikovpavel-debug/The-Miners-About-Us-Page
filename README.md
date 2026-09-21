@@ -76,6 +76,48 @@ once the webfont lands, and on every year swapped into variant B. The limit is o
 `MAX_WORDS` at the top of that block — if you want to move it again. Verified at 1512, 1820
 and phone widths: zero lines over eight words.
 
+## The phone build
+
+The phone has its own type scale — the **Mobile** column of the Figma Typography variables,
+not a shrunk-down desktop:
+
+```
+Display 144   H1 96   H2 64   Title 48   Large subtitle 36
+Subtitle 20   Body 16   Caption 10   Button 16
+```
+
+Those land exactly on a 430 frame. Narrower than that, `fitHeads()` shrinks a heading only
+when its own longest word would not fit the gutter — nothing is guessed and nothing runs off
+the edge. The desktop column of the same table (Display 176.4, H1 128, H2 96, Title 64,
+Subtitle 24, Body 20, Caption 14) is **not** in the build yet — say the word and it goes in.
+
+Other things the phone does differently:
+
+* **Text runs the full width** — one block, no columns and no narrowing. The eight-word rule
+  is a desktop rule: at Body 16 on a 390 screen a full-width line carries six to eight words,
+  and a run of very short ones can reach eleven.
+* **The hero sets a word to a line**, so nothing hangs alone.
+* **Section slogans step down through the real tokens.** `fitSlogan()` tries Title 48, then
+  Large subtitle 36, and keeps the first size at which both halves sit on one line — no
+  in-between sizes. The three timeline titles are all Large subtitle so the variants compare
+  like for like.
+* **The big-year screen shares its height.** The copy takes what it needs and the stage keeps
+  the rest, so the second paragraph is never cut off at the bottom; the lower photo is pinned
+  to the bottom of the stage rather than a fixed percentage. Checked on every one of the eight
+  years at 390 × 700, the tightest real phone.
+* **Numbers** become one figure a row with the label right-aligned beside it, at the frame's
+  Display 144. State 1 spreads four huge figures down the whole panel, state 2 packs them small
+  and tight at the top, and the white block below squeezes between the two exactly as it does on
+  desktop. The figure keeps its size and the label wraps — it is only allowed to push the
+  Display size down if it cannot wrap narrower than its own longest word.
+* **Variant A** keeps the card title on one line with the year, and
+  keeps one rule above the pair of paragraphs; the second is separated by space. Same in
+  **variant B**, whose stage is taller so the two photos sit roughly twice the size, stay inside
+  the screen and only graze the year top and bottom instead of covering it.
+* **Variant C** puts each title above its own photo rather than beside it.
+* **Instagram** is a swipeable strip rather than an endless column of full-width posts.
+* **Careers** is a portrait card with the headline, copy and button stacked.
+
 ## Type scale
 
 Taken straight from the Figma text styles, not measured:
@@ -96,6 +138,7 @@ against the 1512 frame.
 | **The blue** | `--blue: #2F9BE8` was matched by eye against the frame — within a point or two, not exact. One dev-mode copy settles it. |
 | **Three award lines** | The bodies are written to fill the slot — `Twenty-five rooms on the continent`, `Picked by Monocle…`, `First place at the Prague Roasters Competition`. Swap in the real results. |
 | **Two Europe's 25 tiles** | Awards 3 and 4 carry the same title under different marks (Europe's 25 and Monocle). One of them wants its own name. |
+| **The figures** | Switched to the frame's **1M+** and **36K**, because Display 144 on a phone only fits the short strings — `1.1M+` caps out at 80 px. Insider says 1.1M guests and 34.5K cards, so these are different numbers, not a rounding. Say the word and they go back, at a smaller kegel. |
 | **Forbes quote** | `Miners neskrývají světové ambice` moved to Standart as you asked, so Forbes now carries its other headline, `The Miners dobývají Prahu a míří za hranice`. Say the word if you want a different line there. |
 | **Body copy** | The short paragraph in each section header is mine, written to fill the slot — rewrite freely. |
 | **Typos** | `WHERE IT ALL BEGUN` → *began*, `MORE THEN COFFEE SHOP` → *more than a coffee shop*, `ACROSS EUROPPE` → *across Europe*. |
