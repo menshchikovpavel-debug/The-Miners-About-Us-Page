@@ -86,6 +86,22 @@ window.MINERS = {
     }
   ],
 
+  // the four ways to work together — shown in the revolver
+  ways: [
+    { t: 'Franchise', meta: 'For entrepreneurs', img: 'grow-franchise',
+      href: 'https://insider.theminers.eu/',
+      body: 'Bring The Miners to your city and build the brand with us.' },
+    { t: 'White label', meta: 'For events, offices & activations', img: 'grow-whitelabel',
+      href: 'https://b2b.theminers.eu/',
+      body: 'Coffee roasted in Prague for cafés, restaurants, offices and brands.' },
+    { t: 'Coffee supply', meta: 'For teams, HQs & coworkings', img: 'grow-supply',
+      href: 'https://b2b.theminers.eu/',
+      body: 'Better coffee for offices, coworkings, events and everyday teams.' },
+    { t: 'Collab', meta: 'For brands & makers', img: 'grow-collab',
+      href: 'mailto:roastery@theminers.eu?subject=Collaboration',
+      body: 'Have an idea that makes sense together? We want to hear it.' }
+  ],
+
   // pull quotes, in the order the frame lays them out (3 × 2)
   press: [
     { mark: 'press-forbes', outlet: 'Forbes',

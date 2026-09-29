@@ -29,25 +29,31 @@ and the white section below rises and squeezes it: its height is always
 `next section's top + 40`, clamped. When it reaches state 2 — equal columns, figure over
 label, short dividers — it stops shrinking and scrolls away like any other section.
 
-## The three timeline variants
+## The timeline
 
-The pill bottom-right jumps between them; it and the black variant tags are demo scaffolding.
+One treatment only — the revolver. Two cards on screen at all times. On each step the whole
+rank moves left: the left card slides left *and down* until it is gone, the right card takes
+its place, and the next card rises from below and to the right into the right-hand slot. Pure
+translation, eased in and out, cropped by the frame. Under the photo the year's copy runs as
+**one solid block the full width of the card**, with a single hairline above it — no columns.
 
-* **A — revolver cards.** Two cards on screen at all times. On each step the whole rank moves
-  left: the left card slides left *and down* until it is gone, the right card takes its place,
-  and the next card rises from below and to the right into the right-hand slot. Pure
-  translation, eased in and out, cropped by the frame. Card layout is the frame's: title and
-  `Year 20XX` sitting on the same bottom line, one photo, two text columns under hairlines.
-* **B — big year.** The year is centred in its own 1176 × 548 stage and two photos land in
-  different corners for every year, set far enough out that they only graze the digits. Below
-  the stage: title bottom-left, two text columns, each hairline drawing itself out to the right.
-  The year is a four-reel odometer — rolls down going forward, up going back. Each reel is
-  `.68em` wide because the widest digit in Neue Haas Black advances `.674em`; anything tighter
-  clips the glyph and the gap reads as a neighbouring box cutting into it.
-* **C — scroll list.** The scrollbar is live: the thumb tracks the reading line, the active year
-  lights up, and the bar is draggable and keyboard-operable.
+The big-year and scroll-list variants are gone, along with the A/B/C switcher. The scroll-list
+layout was not thrown away — it now carries *ways to work together*: title, body and caption in
+the left column, the live rail down the middle, the pictures on the right, the entry at the
+reading line at full strength and the rest at 32 %. The rail is draggable and keyboard-operable,
+exactly as it was. On a phone each title sits above its own picture and the rail runs down the
+left edge.
 
-## Sections 02 → 07
+## Section order
+
+hero → our story → numbers → timeline → what sets us apart → awards → press →
+**ways to work together** → **brand collaborations** → careers → Instagram → footer.
+
+The header is one height start to finish and no longer grows or shrinks on scroll; only its
+background deepens. The careers block is now a short band between sections rather than a
+full-height card. The kicker above *Our story* carries no number.
+
+## Sections
 
 Rebuilt from the current frame, not the earlier one: heading left and a short paragraph right
 in every section header; `What sets us apart` as two asymmetric rows; `Awards` as five centred
@@ -58,12 +64,44 @@ of quotes; `Collaborations` as a 3 × 3 logo grid with hairlines, not a marquee.
 
 ---
 
-## Palette
+## Everything comes from the Figma variables
 
-Only `#F7F7F7` is available as white — `#FFFFFF`, `#F5F5F5` and the grey `#BFBFBF` are not
-used anywhere on this page. Every surface, every knocked-out text colour and every white
-alpha resolves to `#F7F7F7`. The pale quote mark is a flat `#4FAAEA`, the blue mixed 16 %
-toward that white, rather than a white overlay.
+The sheet no longer carries a value that is not in one of your five collections.
+
+**Color** — `--black #141414`, `--white #F7F7F7`, `--grey #BFBFBF`, plus lime, green, orange,
+magenta, blue, yellow, red, old pink, and the three alpha tokens `--cheap-glass` (F7F7F7 20 %),
+`--panel` (FFFFFF 2 %), `--effect` (FFFFFF 1 %) and `--black-overlay` (141414 60 %). `--ink`,
+`--dark`, `--hair` and `--light` are now aliases onto those, so the old `#0E0E0E`, `#121212`,
+`#6A6A6A` and `#D5D5D5` are gone. The frosted header is Cheap Glass; every photo scrim is
+Black Overlay; every hairline and every piece of secondary copy is Grey.
+
+**Typography (Kegel)** — two modes, two fixed sets, never a fluid value in between. Desktop:
+Display 176.4, H1 128, H2 96, Title 64, Large subtitle 48, Subtitle 24, Body 20, Caption 14,
+Button 20, Big Button 24, Large Display 360. Below 760 the phone column takes over: 144, 96,
+64, 48, 36, 20, 16, 10, 16, 20, 280.
+
+Where a heading still will not fit its gutter, `fitHeads()` does **not** scale it by a ratio —
+it steps down `--ladder`, the Kegel list itself, to the next kegel and tries again. So every
+size on screen is one of yours; there is no 74.49 or 49.6 anywhere. A row of sibling headings
+(`.dcard__t`, the year titles) then settles on one step rather than one each.
+
+**Corner Radius** — `--r-reg 4`, `--r-card 16`, `--r-sec 40`, one set at every width. The
+phone no longer rounds things differently. Pill buttons keep `999px`; the collection has no
+token for them.
+
+**Stroke Weight** — `--stroke-light .6`, `--stroke-heavy 2`. Every hairline is Light; focus
+rings and the burger are Heavy.
+
+**Button padding** — both columns: `32/18`, small `22/14`, big `38/24` on desktop; `24/16`,
+`16/10`, `32/20` on a phone. No button carries a hand-set padding any more.
+
+## Press
+
+The mark above each quote is drawn, not set — a 22 × 18 path pinned to 32 px. It sits in Grey
+with the outlet logo at a matching 75 %, and both go white when you hover the quote. The inline
+quotation marks came out of the copy, because the drawn mark already does that job. Quote text
+is Subtitle at regular weight. The six logos are normalised by optical size rather than box
+height, and World Coffee Portal now uses the wide Allegra lockup you swapped in.
 
 ## Eight words to a line
 

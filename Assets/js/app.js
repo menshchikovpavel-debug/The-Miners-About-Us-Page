@@ -51,17 +51,23 @@
   }
 
   /* ---------------- awards · quotes · collab logos ---------------- */
+  var MARKV = '3';
   $('#awardsList').innerHTML = D.awards.map(function (a) {
-    var badge = '<div class="awards__badge"><img src="Assets/marks/' + a.mark + '.svg" alt="" loading="lazy"></div>';
+    var badge = '<div class="awards__badge"><img src="Assets/marks/' + a.mark + '.svg?v=' + MARKV + '" alt="" loading="lazy"></div>';
     return '<li class="up"><i>' + badge + '<h3>' + a.t1 + '<br>' + a.t2 + '</h3>' +
       '<p' + (a.ph ? ' class="ph"' : '') + '>' + a.d + '</p></i></li>';
   }).join('');
 
   $('#pressList').innerHTML = D.press.map(function (p) {
-    var mark = '<span class="quotes__m" aria-hidden="true">“</span>';
-    var logo = '<img src="Assets/marks/' + p.mark + '.svg" alt="' + p.outlet + '" loading="lazy">';
+    // a drawn mark, not a glyph — 22 × 18 units, set to 32 px tall in CSS
+    var mark = '<span class="quotes__m" aria-hidden="true">' +
+      '<svg viewBox="0 0 22 18" fill="currentColor" role="presentation">' +
+      '<path d="M0 0 H9 L6 16.5 A1.5 1.5 0 0 1 3 16.5 Z"/>' +
+      '<path d="M13 0 H22 L19 16.5 A1.5 1.5 0 0 1 16 16.5 Z"/>' +
+      '</svg></span>';
+    var logo = '<img src="Assets/marks/' + p.mark + '.svg?v=' + MARKV + '" alt="' + p.outlet + '" loading="lazy">';
     var src = p.url ? '<a href="' + p.url + '" target="_blank" rel="noopener">' + logo + '</a>' : logo;
-    return '<li class="up"><i>' + mark + '<blockquote>“' + p.quote + '”</blockquote>' +
+    return '<li class="up"><i>' + mark + '<blockquote>' + p.quote + '</blockquote>' +
       '<div class="quotes__src">' + src + '</div></i></li>';
   }).join('');
 
@@ -87,7 +93,7 @@
     return {
       lb1: clamp(w * .0119, 12, 18), lb2: clamp(w * .0105, 11, 15),
       pd1: w > 760 ? 46 : 12, pd2: w > 760 ? 20 : 8,
-      fsMax: clamp(w * .127, 56, 192), fs2: clamp(w * .048, 30, 72)
+      fsMax: clamp(w * .127, 56, 360), fs2: clamp(w * .048, 30, 72)
     };
   }
   // measure every string once at 100 px so the type can be fitted to the row later
@@ -215,12 +221,14 @@
      variant A — the frame stays put, the cards slide inside it
      ============================================================ */
   var drum = $('#drum'), track = $('#drumTrack'), frame = $('.drum__frame');
-  track.innerHTML = YEARS.map(function (y) {
-    return '<article class="dcard">' +
-      '<div class="dcard__top"><h3 class="dcard__t">' + y.title + '</h3><span class="dcard__y">Year ' + y.year + '</span></div>' +
-      '<img class="dcard__pic" src="' + img(y.photos[0]) + '" alt="" loading="lazy">' +
-      '<div class="dcard__cols"><p>' + y.paras[0] + '</p><p>' + y.paras[1] + '</p></div>' +
-      '</article>';
+  var WAYS = D.ways, NW = WAYS.length;
+  track.innerHTML = WAYS.map(function (w) {
+    var ext = /^mailto:/.test(w.href) ? '' : ' target="_blank" rel="noopener"';
+    return '<article class="dcard"><a class="dcard__a" href="' + w.href + '"' + ext + '>' +
+      '<div class="dcard__top"><h3 class="dcard__t">' + w.t + '</h3><span class="dcard__y">' + w.meta + '</span></div>' +
+      '<img class="dcard__pic" src="Assets/img/' + w.img + '.jpg" alt="" loading="lazy">' +
+      '<div class="dcard__cols"><p>' + w.body + '</p></div>' +
+      '</a></article>';
   }).join('');
   var dcards = [].slice.call(track.children), dG = { w: 0, step: 0, h: 0 };
   function drumGeo() {
@@ -231,7 +239,7 @@
     var w = (inner - gap * (per - 1)) / per;
     dG = { w: w, step: w + gap, h: h };
     dcards.forEach(function (c) { c.style.width = w + 'px'; });
-    drum.style.height = (vh() + Math.max(1, N - per) * vh() * .85) + 'px';
+    drum.style.height = (vh() + Math.max(1, NW - per) * vh() * .85) + 'px';
   }
   // the whole rank keeps a constant step, so the 30 px gap never closes.
   // only the vertical drop and the fade mark a card as leaving or arriving.
@@ -239,7 +247,7 @@
     var r = drum.getBoundingClientRect(), runway = r.height - vh();
     if (runway <= 0) return;
     var p = clamp(-r.top / runway, 0, 1);
-    var per = narrow() ? 1 : 2, steps = Math.max(1, N - per);
+    var per = narrow() ? 1 : 2, steps = Math.max(1, NW - per);
     var cur = p * steps;
     dcards.forEach(function (c, i) {
       var t = i - cur;
@@ -255,175 +263,49 @@
   }
 
   /* ============================================================
-     variant B — big year
+     timeline — a scroll list with a live scrollbar
      ============================================================ */
-  var bigy = $('#bigy'), byYear = $('#byYear'), byPh = $('#byPh');
-  var byTitle = $('#byTitle'), byC1 = $('#byC1'), byC2 = $('#byC2');
-  var byIdx = -1, prevIdx = 0, reels = [], byLabel, STEP = 100 / 20;
-
-  // where the photos land, per year — deliberately different each time
-  // positions are % of the 1176 × 548 stage — deliberately different each year
-  var SPOTS = [
-    [{ l: -9, t: 2, w: 25, r: -8 }, { l: 84, t: 50, w: 25, r: 4 }],
-    [{ l: -11, t: 46, w: 24, r: 6 }, { l: 87, t: -4, w: 26, r: -5 }],
-    [{ l: -5, t: 52, w: 23, r: -9 }, { l: 85, t: 0, w: 24, r: 5 }],
-    [{ l: -10, t: 0, w: 25, r: 7 }, { l: 83, t: 48, w: 24, r: -6 }],
-    [{ l: -3, t: -2, w: 23, r: -5 }, { l: 86, t: 44, w: 25, r: 8 }],
-    [{ l: -9, t: 50, w: 25, r: -6 }, { l: 84, t: -2, w: 23, r: 6 }],
-    [{ l: -7, t: 0, w: 24, r: 5 }, { l: 82, t: 50, w: 25, r: -8 }],
-    [{ l: -11, t: 40, w: 23, r: -4 }, { l: 86, t: -4, w: 26, r: 6 }]
-  ];
-
-  // phone: the stage is narrow, so the photos get their own set of spots —
-  // always inside 0…100 % of the stage and roughly twice the area
-  var SPOTS_M = [
-    [{ l: 0, t: 4, w: 46, r: -5 }, { l: 54, b: 2, w: 46, r: 4 }],
-    [{ l: 2, t: 6, w: 44, r: 5 }, { l: 54, b: 4, w: 46, r: -4 }],
-    [{ l: 0, t: 5, w: 46, r: -6 }, { l: 56, b: 1, w: 44, r: 3 }],
-    [{ l: 3, t: 7, w: 44, r: 4 }, { l: 53, b: 3, w: 47, r: -5 }],
-    [{ l: 0, t: 3, w: 47, r: -4 }, { l: 55, b: 2, w: 45, r: 5 }],
-    [{ l: 2, t: 6, w: 46, r: -5 }, { l: 54, b: 0, w: 44, r: 4 }],
-    [{ l: 0, t: 5, w: 45, r: 4 }, { l: 55, b: 4, w: 45, r: -5 }],
-    [{ l: 3, t: 4, w: 44, r: -3 }, { l: 53, b: 1, w: 47, r: 5 }]
-  ];
-
-  (function buildBigY() {
-    byLabel = document.createElement('span'); byLabel.className = 'sr';
-    byYear.innerHTML = String(YEARS[0].year).split('').map(function () {
-      var it = ''; for (var d = 0; d < 20; d++) it += '<em>' + (d % 10) + '</em>';
-      return '<span class="reel"><u>' + it + '</u></span>';
-    }).join('');
-    byYear.setAttribute('aria-hidden', 'true');
-    byYear.parentElement.appendChild(byLabel);
-    reels = [].slice.call(byYear.querySelectorAll('u')).map(function (u, i) {
-      u.style.transitionDelay = (i * 70) + 'ms';
-      return { u: u, pos: 0, d: 0 };
-    });
-  })();
-  function snapReel(r, pos) {
-    var keep = r.u.style.transitionDelay;
-    r.u.style.transition = 'none';
-    r.u.style.transform = 'translateY(' + (-pos * STEP) + '%)';
-    void r.u.offsetHeight;
-    r.u.style.transition = ''; r.u.style.transitionDelay = keep; r.pos = pos;
-  }
-  function setYear(year, dir) {
-    String(year).split('').forEach(function (ch, i) {
-      var r = reels[i], d = +ch, base = r.pos % 10;
-      if (r.d === d && base === d) return;
-      if (r.pos !== base) snapReel(r, base);
-      var to;
-      if (dir >= 0) to = d > base ? d : d + 10;
-      else if (d < base) to = d;
-      else { snapReel(r, base + 10); to = d; }
-      r.pos = to; r.d = d;
-      r.u.style.transform = 'translateY(' + (-to * STEP) + '%)';
-    });
-    byLabel.textContent = year;
-  }
-  var OUT = 420;                                   // the old content leaves first
-  function swap(el, html, delay) {
-    var fresh = document.createElement('div');
-    fresh.className = 'sw';
-    fresh.innerHTML = html;
-    if (reduce) { el.replaceChildren(fresh); return; }
-    // a fast scroll can stack these up — drop anything already on its way out
-    [].slice.call(el.children).forEach(function (c) { if (c.classList.contains('ghost')) c.remove(); });
-    var old = el.lastElementChild, wait = 0;
-    if (old) {
-      old.classList.add('ghost', 'swap-out');
-      setTimeout(function () { if (old.parentNode) old.remove(); }, OUT + 80);
-      wait = OUT;                                  // only then does the new one arrive
-    }
-    fresh.classList.add('swap-in');
-    fresh.style.animationDelay = (wait + (delay || 0)) + 'ms';
-    el.appendChild(fresh);
-    setTimeout(function () { capLines(fresh); }, 0);   // reflow-heavy — never inside a scroll frame
-  }
-
-  function showYear(i) {
-    if (i === byIdx) return;
-    var y = YEARS[i], dir = i >= prevIdx ? 1 : -1;
-    byIdx = i; prevIdx = i;
-    setYear(y.year, dir);
-    // old photos fade and slide up behind the year, new ones arrive after they have gone
-    var spots = (narrow() ? SPOTS_M : SPOTS)[i % SPOTS.length];
-    var gen = (byPh.dataset.gen = String((+byPh.dataset.gen || 0) + 1));
-    [].slice.call(byPh.children).forEach(function (f) {
-      if (f.dataset.out) { f.remove(); return; }   // already leaving from a previous swap
-      f.dataset.out = '1';
-      f.style.animation = 'none';
-      f.style.opacity = '0';
-      f.style.transform = 'translateY(-70px)';
-      setTimeout(function () { if (f.parentNode) f.remove(); }, OUT + 60);
-    });
-    setTimeout(function () {
-      if (byPh.dataset.gen !== gen) return;        // a newer year already took over
-      spots.forEach(function (sp, k) {
-        // a keyframe, not a rAF-driven transition: a frame that never runs
-        // used to leave the photo parked 46 px low and invisible
-        var fig = document.createElement('figure');
-        var vert = sp.b === undefined ? 'top:' + sp.t + '%' : 'bottom:' + sp.b + '%';
-        fig.style.cssText = 'left:' + sp.l + '%;' + vert + ';width:' + sp.w + '%;' +
-          'aspect-ratio:4/3;animation-delay:' + (k * 90) + 'ms';
-        fig.innerHTML = '<img style="transform:rotate(' + sp.r + 'deg)" src="' +
-          img(y.photos[k]) + '" alt="" loading="lazy">';
-        byPh.appendChild(fig);
-      });
-    }, reduce ? 0 : OUT);
-    // title first, then the body columns and the rule together
-    swap(byTitle, y.title, 0);
-    swap(byC1, '<p>' + y.paras[0] + '</p>', 120);
-    swap(byC2, '<p>' + y.paras[1] + '</p>', 200);
-    [byC1, byC2].forEach(function (el, n) {
-      el.classList.remove('on'); void el.offsetHeight;
-      setTimeout(function () { el.classList.add('on'); }, OUT + 80 + n * 90);
-    });
-  }
-  function bigyFrame() {
-    var r = bigy.getBoundingClientRect(), runway = r.height - vh();
-    if (runway <= 0) return;
-    var p = clamp(-r.top / runway, 0, 1);
-    showYear(clamp(Math.floor(p * N), 0, N - 1));
-  }
-
-  /* ============================================================
-     variant C — scroll list with a live scrollbar
-     ============================================================ */
-  var tlist = $('#tlist'), tbar = $('#tlistBar'), thumb = $('#tlistThumb');
+  var tlist = $('#tlist'), tbar = $('#tlistBar'), tthumb = $('#tlistThumb');
   (function buildList() {
     var html = '';
     YEARS.forEach(function (y, i) {
-      html += '<div class="tlist__t" style="grid-row:' + (i + 1) + '"><h3>' + y.title + '</h3><b>' + y.year + '</b></div>' +
+      html += '<div class="tlist__t" style="grid-row:' + (i + 1) + '">' +
+        '<h3>' + y.title + '</h3><b>' + y.year + '</b></div>' +
         '<div class="tlist__row up" style="grid-row:' + (i + 1) + '"><i>' +
         '<img src="' + img(y.photos[0]) + '" alt="" loading="lazy">' +
-        '<div class="tx">' + y.paras.map(function (p) { return '<p>' + p + '</p>'; }).join('') + '</div>' +
+        '<div class="tx"><p>' + y.paras.join(' ') + '</p></div>' +
         '</i></div>';
     });
-    tlist.style.gridTemplateRows = 'repeat(' + N + ', auto)';
     tlist.insertAdjacentHTML('beforeend', html);
   })();
-  var tTitles = [].slice.call(tlist.querySelectorAll('.tlist__t'));
+  var tTexts = [].slice.call(tlist.querySelectorAll('.tlist__t'));
   var tRows = [].slice.call(tlist.querySelectorAll('.tlist__row'));
+
   function listRows() {
+    if (!tTexts.length) return;
     var n = narrow();
-    tTitles.forEach(function (t, i) { t.style.gridRow = String(n ? 2 * i + 1 : i + 1); });
-    tRows.forEach(function (r, i) { r.style.gridRow = String(n ? 2 * i + 2 : i + 1); });
+    tTexts.forEach(function (t, i) { t.style.gridRow = String(n ? 2 * i + 1 : i + 1); });
+    tRows.forEach(function (r2, i) { r2.style.gridRow = String(n ? 2 * i + 2 : i + 1); });
+    // the rail spans 1/-1, which only reaches the last EXPLICIT line
     tlist.style.gridTemplateRows = 'repeat(' + (n ? 2 * N : N) + ', auto)';
   }
+
   function listFrame() {
+    if (!tlist || !tRows.length) return;
     var r = tlist.getBoundingClientRect(), line = vh() * .45;
     var p = clamp((line - r.top) / Math.max(1, r.height), 0, 1);
-    thumb.style.top = (p * (tbar.clientHeight - thumb.offsetHeight)).toFixed(1) + 'px';
+    tthumb.style.top = (p * (tbar.clientHeight - tthumb.offsetHeight)).toFixed(1) + 'px';
     tbar.setAttribute('aria-valuenow', Math.round(p * 100));
     var act = 0;
-    tRows.forEach(function (row, i) { if (row.getBoundingClientRect().top <= line) act = i; });
-    tTitles.forEach(function (t, i) { t.classList.toggle('on', i === act); });
+    tRows.forEach(function (r2, i) { if (r2.getBoundingClientRect().top <= line) act = i; });
+    tTexts.forEach(function (t, i) { t.classList.toggle('on', i === act); });
   }
+
   (function dragBar() {
+    if (!tbar) return;
     var down = false;
     function jump(cy) {
-      var b = tbar.getBoundingClientRect(), th = thumb.offsetHeight;
+      var b = tbar.getBoundingClientRect(), th = tthumb.offsetHeight;
       var p = clamp((cy - b.top - th / 2) / Math.max(1, b.height - th), 0, 1);
       var r = tlist.getBoundingClientRect();
       scrollTo({ top: scrollY + (r.top + p * r.height - vh() * .45), behavior: 'auto' });
@@ -432,31 +314,18 @@
     tbar.addEventListener('pointermove', function (e) { if (down) jump(e.clientY); });
     ['pointerup', 'pointercancel'].forEach(function (ev) { tbar.addEventListener(ev, function () { down = false; tbar.classList.remove('is-drag'); }); });
     tbar.addEventListener('keydown', function (e) {
-      var s = vh() * .6;
-      if (e.key === 'ArrowDown' || e.key === 'PageDown') { scrollBy({ top: s }); e.preventDefault(); }
-      if (e.key === 'ArrowUp' || e.key === 'PageUp') { scrollBy({ top: -s }); e.preventDefault(); }
+      var s2 = vh() * .6;
+      if (e.key === 'ArrowDown' || e.key === 'PageDown') { scrollBy({ top: s2 }); e.preventDefault(); }
+      if (e.key === 'ArrowUp' || e.key === 'PageUp') { scrollBy({ top: -s2 }); e.preventDefault(); }
     });
   })();
-
-  /* ---------------- pills ---------------- */
-  var pills = [].slice.call(document.querySelectorAll('.vnav a'));
-  function pillFrame() {
-    var best = null, bd = Infinity;
-    pills.forEach(function (a) {
-      var s = document.getElementById(a.dataset.v); if (!s) return;
-      var d = Math.abs(s.getBoundingClientRect().top - vh() * .3);
-      if (d < bd) { bd = d; best = a; }
-    });
-    pills.forEach(function (a) { a.classList.toggle('on', a === best); });
-  }
-
 
   /* ---------------- the line-length rule, page-wide ----------------
      A width cap in ch only gets you close: a run of short words still
      fits several more than the measure suggests. So measure the rendered
      lines and tighten only the paragraphs that run past MAX_WORDS. */
   var MAX_WORDS = 8;
-  var COPY = '.headrow__t p,.story__txt p,.dcard__cols p,.bigy__col p,.tlist__row p,' +
+  var COPY = '.headrow__t p,.story__txt p,' +
             '.tile__in p,.awards p,.careers__in p,.grow p,.quotes blockquote,.ftr p';
 
   function worstLine(el) {
@@ -495,7 +364,7 @@
 
   /* columns that sit side by side share one measure, so a tightened
      paragraph never ends up narrower than the one next to it */
-  var GROUPS = '.story__txt,.dcard__cols,.bigy__bot,.tlist__row,.apart,.awards,.grow,.quotes';
+  var GROUPS = '.story__txt,.apart,.awards,.grow,.quotes';
 
   function level(g) {
     var els = [].filter.call(g.querySelectorAll(COPY), function (e) {
@@ -511,7 +380,7 @@
      H1 96, H2 64 …), which is larger than a 390 px screen can always hold. Rather
      than guess a smaller number, shrink a heading only when its longest word
      would not fit. */
-  var HEADS = '.display,.h2,.ftr__h,.dcard__t,.bigy__t,.tlist__t h3,.grow h3,.awards h3,.tile__in h3';
+  var HEADS = '.display,.h2,.ftr__h,.dcard__t,.grow h3,.awards h3,.tile__in h3';
 
   function widestWord(el) {
     var rng = document.createRange(), walk = document.createTreeWalker(el, NodeFilter.SHOW_TEXT, null);
@@ -565,23 +434,43 @@
     return false;                    // stays at 36 and the word fit takes over
   }
 
+  // Every size on screen has to be one of the tokens. When a heading will not
+  // fit its gutter we do not scale it by a ratio — we step down the ladder to
+  // the next kegel in the collection and try again.
+  function ladder() {
+    var raw = getComputedStyle(document.documentElement).getPropertyValue('--ladder');
+    var out = raw.trim().split(/\s+/).map(parseFloat).filter(function (n) { return n > 0; });
+    return out.sort(function (x, y) { return y - x; });
+  }
+
   function fitHeads() {
-    var on = narrow();
+    var on = narrow(), steps = ladder();
     [].forEach.call(document.querySelectorAll(HEADS), function (el) {
       el.style.fontSize = '';
-      if (!on) return;
-      if (el.classList.contains('h2') && fitSlogan(el)) return;
-      // the element itself can already be overflowing, so cap by the gutter
+      if (on && el.classList.contains('h2') && fitSlogan(el)) return;
       var box = el.clientWidth, row = el.closest('.row');
       if (row) {
         var rs = getComputedStyle(row);
         box = Math.min(box, row.clientWidth - parseFloat(rs.paddingLeft) - parseFloat(rs.paddingRight));
       }
       if (!box) return;
-      var word = widestWord(el); if (word <= box) return;
-      el.style.fontSize = (parseFloat(getComputedStyle(el).fontSize) * box / word) + 'px';
-      if (el.classList.contains('h2')) return;
+      var base = parseFloat(getComputedStyle(el).fontSize);
+      if (widestWord(el) <= box + .5) return;    // sub-pixel ties are not overflow
+      for (var i = 0; i < steps.length; i++) {
+        if (steps[i] >= base) continue;                 // only ever smaller
+        el.style.fontSize = steps[i] + 'px';
+        if (widestWord(el) <= box + .5) return;
+      }
     });
+  }
+
+  // a row of sibling headings settles on one step, not one each
+  function levelHeads(sel) {
+    var els = [].slice.call(document.querySelectorAll(sel));
+    if (els.length < 2) return;
+    var min = Infinity;
+    els.forEach(function (e) { min = Math.min(min, parseFloat(getComputedStyle(e).fontSize)); });
+    els.forEach(function (e) { e.style.fontSize = min + 'px'; });
   }
 
   function capLines(root) {
@@ -602,11 +491,12 @@
   function layout() {
     nums.style.height = (vh() + 4) + 'px';
     measureNums();
-    drumGeo();
-    bigy.style.height = (N * vh() * .9) + 'px';
     listRows();
+    drumGeo();
     heroLines();
     fitHeads();
+    levelHeads('.dcard__t');
+    levelHeads('.tlist__t h3');
     capLines();
     frameTick();
   }
@@ -614,7 +504,7 @@
   function frameTick() {
     lastFrame = performance.now();
     try {
-      revealFrame(); numsFrame(); drumFrame(); bigyFrame(); listFrame(); pillFrame(); hdrState();
+      revealFrame(); numsFrame(); drumFrame(); listFrame(); hdrState();
     } finally {
       ticking = false;          // a throw must never strand the loop
     }

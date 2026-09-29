@@ -6,7 +6,7 @@
 <title>The Miners — About us</title>
 <meta name="description" content="The Miners — a specialty coffee roastery and coffee shop chain. Prague, since 2019.">
 <link rel="icon" href="Assets/svg/mark.svg">
-<link rel="stylesheet" href="Assets/css/styles.css?v=1789999046">
+<link rel="stylesheet" href="Assets/css/styles.css?v=1790156917">
 </head>
 <body>
 
@@ -65,10 +65,6 @@
   </div>
 </div>
 
-<nav class="vnav" id="vnav" aria-label="Timeline variants">
-  <span>Timeline</span><a href="#var-a" data-v="var-a">A</a><a href="#var-b" data-v="var-b">B</a><a href="#var-c" data-v="var-c">C</a>
-</nav>
-
 <main>
 
 <!-- ═══════════════════════ hero ═══════════════════════ -->
@@ -82,7 +78,7 @@
 <!-- ═══════════════════ 01 — our story ═══════════════════ -->
 <section class="sec sec--light" id="story">
   <div class="row">
-    <p class="kicker up"><i>01 — Our story</i></p>
+    <p class="kicker up"><i>Our story</i></p>
     <div class="story">
       <div class="story__l">
         <h2 class="h2"><span class="up"><i>It started</i></span><span class="up"><i>in Prague.</i></span><span class="up"><i>The idea went</i></span><span class="up"><i class="accent">further.</i></span></h2>
@@ -111,44 +107,12 @@
   </div>
 </section>
 
-<!-- ═══════════ variant A — cards sliding inside a fixed frame ═══════════ -->
-<section class="sec sec--light var" id="var-a" aria-label="Timeline — variant A">
-  <div class="row var__head"><p class="var__tag">Variant A — revolver cards</p></div>
-  <div class="drum" id="drum">
-    <div class="drum__stick">
-      <div class="row drum__frame">
-        <div class="drum__clip"><div class="drum__track" id="drumTrack"></div></div>
-      </div>
-    </div>
-  </div>
-</section>
-
-<!-- ═══════════ variant B — big year ═══════════ -->
-<section class="sec sec--light var" id="var-b" aria-label="Timeline — variant B">
-  <div class="row var__head"><p class="var__tag">Variant B — big year</p></div>
-  <div class="bigy" id="bigy">
-    <div class="bigy__stick">
-      <div class="row">
-        <div class="bigy__stage">
-          <div class="bigy__year" id="byYear"></div>
-          <div class="bigy__ph" id="byPh"></div>
-        </div>
-        <div class="bigy__bot">
-          <h3 class="bigy__t" id="byTitle"></h3>
-          <div class="bigy__col" id="byC1"></div>
-          <div class="bigy__col" id="byC2"></div>
-        </div>
-      </div>
-    </div>
-  </div>
-</section>
-
-<!-- ═══════════ variant C — scroll list ═══════════ -->
-<section class="sec sec--light var" id="var-c" aria-label="Timeline — variant C">
-  <div class="row var__head"><p class="var__tag">Variant C — scroll list</p></div>
+<!-- ═══════════════════ timeline — scroll list ═══════════════════ -->
+<section class="sec sec--light" id="timeline" aria-label="Timeline">
   <div class="row">
     <div class="tlist" id="tlist">
-      <div class="tlist__bar" id="tlistBar" role="scrollbar" aria-label="Timeline progress" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100" tabindex="0">
+      <div class="tlist__bar" id="tlistBar" role="scrollbar" aria-label="Timeline progress"
+           aria-valuenow="0" aria-valuemin="0" aria-valuemax="100" tabindex="0">
         <span class="tlist__thumb" id="tlistThumb"></span>
       </div>
     </div>
@@ -195,7 +159,7 @@
 </section>
 
 <!-- ═══════════════════ 05 — press ═══════════════════ -->
-<section class="sec sec--blue" id="press">
+<section class="sec sec--dark" id="press">
   <span class="quotemark" aria-hidden="true">“</span>
   <div class="row">
     <div class="headrow">
@@ -206,7 +170,24 @@
   </div>
 </section>
 
-<!-- ═══════════════ 06 — collaborations ═══════════════ -->
+<!-- ═══════════════ 06 — ways to work together ═══════════════ -->
+<section class="sec sec--light" id="grow">
+  <div class="row">
+    <div class="headrow">
+      <h2 class="h2"><span class="up"><i>Different ways</i></span><span class="up"><i>to work together.</i></span></h2>
+      <div class="headrow__t up"><i><p>Four doors into the same brand. Pick the one that fits what you are building.</p></i></div>
+    </div>
+  </div>
+  <div class="drum" id="drum">
+    <div class="drum__stick">
+      <div class="row drum__frame">
+        <div class="drum__clip"><div class="drum__track" id="drumTrack"></div></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════ 07 — brand collaborations ═══════════════ -->
 <section class="sec sec--light" id="collabs">
   <div class="row">
     <div class="headrow">
@@ -214,38 +195,6 @@
       <div class="headrow__t up"><i><p>Drinks, merch, pop-ups and events made with brands we actually like — and would drink with anyway.</p></i></div>
     </div>
     <ul class="logos" id="logoGrid"></ul>
-  </div>
-</section>
-
-<!-- ═══════════════ 07 — grow with us ═══════════════ -->
-<section class="sec sec--light" id="grow">
-  <div class="row">
-    <div class="headrow">
-      <h2 class="h2"><span class="up"><i>Different ways</i></span><span class="up"><i>to work together.</i></span></h2>
-      <div class="headrow__t up"><i><p>Four doors into the same brand. Pick the one that fits what you are building.</p></i></div>
-    </div>
-    <ul class="grow">
-      <li class="up"><i><a href="https://insider.theminers.eu/" target="_blank" rel="noopener">
-        <img src="Assets/img/grow-franchise.jpg" alt="" loading="lazy">
-        <div class="grow__in"><h3>Franchise</h3>
-          <p>Bring The Miners to your city and build the brand with us.</p>
-          <span class="grow__meta">For entrepreneurs</span></div></a></i></li>
-      <li class="up"><i><a href="https://b2b.theminers.eu/" target="_blank" rel="noopener">
-        <img src="Assets/img/grow-whitelabel.jpg" alt="" loading="lazy">
-        <div class="grow__in"><h3>White label</h3>
-          <p>Coffee roasted in Prague for cafés, restaurants, offices and brands.</p>
-          <span class="grow__meta">For events, offices &amp; activations</span></div></a></i></li>
-      <li class="up"><i><a href="https://b2b.theminers.eu/" target="_blank" rel="noopener">
-        <img src="Assets/img/grow-supply.jpg" alt="" loading="lazy">
-        <div class="grow__in"><h3>Coffee supply</h3>
-          <p>Better coffee for offices, coworkings, events and everyday teams.</p>
-          <span class="grow__meta">For teams, HQs &amp; coworkings</span></div></a></i></li>
-      <li class="up"><i><a href="mailto:roastery@theminers.eu?subject=Collaboration">
-        <img src="Assets/img/grow-collab.jpg" alt="" loading="lazy">
-        <div class="grow__in"><h3>Collab</h3>
-          <p>Have an idea that makes sense together? We want to hear it.</p>
-          <span class="grow__meta">For brands &amp; makers</span></div></a></i></li>
-    </ul>
   </div>
 </section>
 
@@ -312,7 +261,7 @@
   </div>
 </footer>
 
-<script src="Assets/js/data.js?v=1789999046"></script>
-<script src="Assets/js/app.js?v=1789999046"></script>
+<script src="Assets/js/data.js?v=1790156917"></script>
+<script src="Assets/js/app.js?v=1790156917"></script>
 </body>
 </html>
