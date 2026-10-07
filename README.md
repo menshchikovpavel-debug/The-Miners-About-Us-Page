@@ -95,6 +95,13 @@ rings and the burger are Heavy.
 **Button padding** — both columns: `32/18`, small `22/14`, big `38/24` on desktop; `24/16`,
 `16/10`, `32/20` on a phone. No button carries a hand-set padding any more.
 
+## One open question on the scale
+
+Section slogans are **48/90**, read off the frame. In your *text styles* that is `Title`; in the
+*variable collection* 48 is `Large subtitle` on the desktop column, and `Title` there is 64. The
+build follows the frame, so it uses the token that equals 48. Tell me which of the two is the
+source of truth and I will align the other.
+
 ## Press
 
 The mark above each quote is drawn, not set — a 22 × 18 path pinned to 32 px. It sits in Grey

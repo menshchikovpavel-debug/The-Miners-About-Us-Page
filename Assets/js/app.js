@@ -292,12 +292,25 @@
 
   function listFrame() {
     if (!tlist || !tRows.length) return;
-    var r = tlist.getBoundingClientRect(), line = vh() * .45;
+    var r = tlist.getBoundingClientRect();
+    var line = vh() / 2;                              // the reading line is the middle of the screen
+    var barH = tbar.clientHeight;
+
+    // the thumb stands for one block plus a fifth, whatever the year count
+    var thumbH = Math.round(barH / tRows.length * 1.2);
+    if (Math.abs(tthumb.offsetHeight - thumbH) > 1) tthumb.style.height = thumbH + 'px';
+
     var p = clamp((line - r.top) / Math.max(1, r.height), 0, 1);
-    tthumb.style.top = (p * (tbar.clientHeight - tthumb.offsetHeight)).toFixed(1) + 'px';
+    tthumb.style.top = (p * (barH - thumbH)).toFixed(1) + 'px';
     tbar.setAttribute('aria-valuenow', Math.round(p * 100));
-    var act = 0;
-    tRows.forEach(function (r2, i) { if (r2.getBoundingClientRect().top <= line) act = i; });
+
+    // whichever block sits closest to the middle is the live one
+    var act = 0, best = Infinity;
+    tRows.forEach(function (r2, i) {
+      var b = r2.getBoundingClientRect();
+      var d = Math.abs((b.top + b.bottom) / 2 - line);
+      if (d < best) { best = d; act = i; }
+    });
     tTexts.forEach(function (t, i) { t.classList.toggle('on', i === act); });
   }
 
@@ -308,7 +321,7 @@
       var b = tbar.getBoundingClientRect(), th = tthumb.offsetHeight;
       var p = clamp((cy - b.top - th / 2) / Math.max(1, b.height - th), 0, 1);
       var r = tlist.getBoundingClientRect();
-      scrollTo({ top: scrollY + (r.top + p * r.height - vh() * .45), behavior: 'auto' });
+      scrollTo({ top: scrollY + (r.top + p * r.height - vh() / 2), behavior: 'auto' });
     }
     tbar.addEventListener('pointerdown', function (e) { down = true; tbar.classList.add('is-drag'); tbar.setPointerCapture(e.pointerId); jump(e.clientY); });
     tbar.addEventListener('pointermove', function (e) { if (down) jump(e.clientY); });

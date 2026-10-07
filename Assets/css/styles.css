@@ -178,7 +178,11 @@ h1,h2,h3,h4,p,dd,dt,figure{margin:0}
 
 .kicker{font-size:var(--fs-kick);font-weight:500;color:var(--accent);letter-spacing:.01em}
 .kicker--dark{color:var(--ink)}
-.h2{font-size:var(--fs-h2);font-weight:800;line-height:var(--lh-tight);text-transform:uppercase;letter-spacing:0}
+/* The frame sets the section slogan at 48/90 — that is "Title" in your text
+   styles, and 48 is what the variable collection calls Large subtitle on the
+   desktop column (Title there is 64). Following the frame. */
+.h2{font-size:var(--fs-lsub);font-weight:800;line-height:var(--lh-tight);
+  text-transform:uppercase;letter-spacing:0}
 .h2--light{color:var(--white)}
 .accent{color:var(--accent)}
 .ph{display:inline-block;background:var(--grey);color:var(--accent);padding:1px 8px;border-radius:4px;font-weight:500;font-size:.92em}
@@ -246,7 +250,7 @@ h1,h2,h3,h4,p,dd,dt,figure{margin:0}
   border-radius:999px;cursor:grab;touch-action:none}
 .tlist__bar.is-drag{cursor:grabbing}
 .tlist__bar:focus-visible{outline:var(--stroke-heavy) solid var(--accent);outline-offset:3px}
-.tlist__thumb{position:absolute;left:-1px;right:-1px;height:22%;min-height:70px;
+.tlist__thumb{position:absolute;left:-1px;right:-1px;height:15%;
   background:var(--accent);border-radius:999px;transition:top .12s linear}
 .tlist__t{grid-column:1;align-self:start;padding-top:4px;opacity:.32;transition:opacity .35s ease}
 .tlist__t.on{opacity:1}
