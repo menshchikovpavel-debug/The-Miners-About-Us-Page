@@ -154,7 +154,11 @@
        State 1 spreads four huge figures down the panel, state 2 packs
        them small and tight at the top. ---- */
     if (narrow()) {
-      // Display 144 is the size in the frame. The only thing that may push it
+      // на телефоне панель не сжимается и цифры держат размер — Павел просил
+      // оставить их большими на всём скролле
+      h = H; k = 0;
+      numsPanel.style.height = h + 'px';
+      // Display is the size in the frame. The only thing that may push it
       // down is a label that cannot wrap any narrower than its longest word.
       var gapX = 14, fitM = Infinity;
       numRatio.forEach(function (r, i) {
@@ -419,7 +423,7 @@
       // каждое слово выезжает своим шагом, сквозной счётчик по всему заголовку
       var want = on
         ? i.dataset.txt.trim().split(/\s+/).map(function (w) {
-            return '<span style="transition-delay:' + (step++ * 110) + 'ms">' + w + '</span>';
+            return '<span><b style="transition-delay:' + (step++ * 110) + 'ms">' + w + '</b></span>';
           }).join('')
         : i.dataset.txt;
       if (i.innerHTML !== want) i.innerHTML = want;

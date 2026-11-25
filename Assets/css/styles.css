@@ -54,19 +54,19 @@
      the phone block swaps in the mobile column. Where a heading still will
      not fit, fitHeads() steps DOWN THE LADDER to the next token, so every
      rendered size is one of yours. */
-  --fs-display:176.4px;
-  --fs-h1:128px;
-  --fs-h2:96px;
-  --fs-title:64px;
-  --fs-lsub:48px;
-  --fs-sub:24px;
+  --fs-ldisplay:360px;   /* Large Display */
+  --fs-display:184px;    /* Display */
+  --fs-h1:120px;         /* H1 — Big Title */
+  --fs-h2:96px;          /* H2 — Title */
+  --fs-h3:64px;          /* H3 — Small title */
+  --fs-h4:48px;          /* H4 — Large subtitle */
+  --fs-h5:32px;          /* H5 — Lead */
+  --fs-h6:24px;          /* H6 — Subtitle */
   --fs-body:20px;
-  --fs-caption:14px;
+  --fs-caption:13px;
   --fs-btn:20px;
   --fs-bigbtn:24px;
-  --fs-ldisplay:360px;
-  /* the Kegel ladder itself, so a stepped-down heading always lands on a token */
-  --ladder:176.4 128 96 64 48 24 20;
+  --ladder:360 184 120 96 64 48 32 24 20;
 
   --lh-tight:.9;
   --lh-body:1.45;
@@ -77,12 +77,17 @@
   --lap:40px;            /* how far each section rides over the one above */
   --hdr-h:92px;          /* one height, start to finish */
   --hdr-solid:92px;
-  --pad-sec:var(--gut);   /* поле сверху/снизу = поле сбоку */
+  /* Иерархия: от края — самое большое, глубже в группу — меньше */
+  --pad-sec:100px;       /* поле секции сверху/снизу */
+  --sp-1:56px;           /* между крупными блоками секции */
+  --sp-2:32px;           /* внутри группы */
   --ease:cubic-bezier(.4,0,.2,1);
 
   /* aliases kept so the rest of the sheet reads in design words */
   --fs-num:var(--fs-ldisplay);
-  --fs-h3:var(--fs-sub);
+  --fs-title:var(--fs-h3);
+  --fs-lsub:var(--fs-h4);
+  --fs-sub:var(--fs-h6);
   --fs-card:var(--fs-title);
   --fs-cardbody:var(--fs-body);
   --fs-label:var(--fs-sub);
@@ -162,11 +167,13 @@ h1,h2,h3,h4,p,dd,dt,figure{margin:0}
 .hero__in{position:relative;z-index:1;color:var(--white);padding-bottom:clamp(56px,7.4vw,112px)}
 .hero .display .up > i > span{display:block}
 @media (max-width:760px){
-  /* на телефоне строка разбита на слова — анимируем их, а не группу */
+  /* на телефоне строка разбита на слова: окно у каждого своё, иначе слово
+     просто висит на месте вместо того, чтобы выезжать */
   .hero .display .up > i{opacity:1;transform:none;transition:none}
-  .hero .display .up > i > span{transform:translateY(102%);
-    transition:transform .8s var(--ease)}
-  .hero .display .up.in > i > span{transform:none}
+  .hero .display .up > i > span{display:block;overflow:hidden}
+  .hero .display .up > i > span > b{display:block;font-weight:inherit;
+    transform:translateY(102%);transition:transform .8s var(--ease)}
+  .hero .display .up.in > i > span > b{transform:none}
 }
 .display{font-size:var(--fs-display);font-weight:800;line-height:var(--lh-tight);
   text-transform:uppercase;letter-spacing:0}
@@ -194,15 +201,16 @@ h1,h2,h3,h4,p,dd,dt,figure{margin:0}
 .accent{color:var(--accent)}
 .ph{display:inline-block;background:var(--grey);color:var(--accent);padding:1px 8px;border-radius:4px;font-weight:500;font-size:.92em}
 .headrow{display:grid;grid-template-columns:minmax(0,900fr) minmax(0,420fr);column-gap:38px;
-  align-items:start;margin-bottom:var(--gut)}
+  align-items:start;margin-bottom:var(--sp-1)}
 .headrow--kick{grid-template-columns:minmax(0,420fr) minmax(0,900fr);align-items:baseline}
 .headrow__t p{max-width:var(--measure);font-size:var(--fs-cardbody);line-height:1.33}
 
 /* ---------- 01 story ---------- */
-.story{display:grid;grid-template-columns:420fr 894fr;column-gap:38px;align-items:start;margin-top:28px}
-.story__txt{margin-top:var(--gut)}
-.story__txt p{max-width:var(--measure);margin-bottom:20px}
-.story__founders{margin-top:var(--gut);margin-bottom:0}
+.story{display:grid;grid-template-columns:420fr 894fr;column-gap:38px;align-items:start}
+.story .kicker{margin-bottom:var(--sp-2)}
+.story__txt{margin-top:var(--sp-1)}
+.story__txt p{max-width:var(--measure);margin-bottom:var(--sp-2)}
+.story__founders{margin-top:var(--sp-1);margin-bottom:0}
 .story__founders b{font-weight:500}
 .story__fig img{width:100%;aspect-ratio:894/679;object-fit:cover;border-radius:var(--r-img)}
 
@@ -245,7 +253,7 @@ h1,h2,h3,h4,p,dd,dt,figure{margin:0}
   line-height:var(--lh-tight);letter-spacing:0;max-width:12ch;
   display:flex;flex-direction:column;justify-content:flex-end;
   min-height:calc(2em * var(--lh-tight))}
-.dcard__y{font-size:var(--fs-h3);font-weight:800;white-space:nowrap}
+.dcard__y{font-size:var(--fs-h6);font-weight:800;white-space:nowrap}
 .dcard__pic{width:100%;flex:1 1 auto;min-height:0;object-fit:cover;border-radius:var(--r-img)}
 .dcard__cols{margin-top:22px;flex:0 0 auto}
 .dcard__cols p{max-width:none;font-size:var(--fs-sub);line-height:1.4;
@@ -263,7 +271,7 @@ h1,h2,h3,h4,p,dd,dt,figure{margin:0}
 .tlist__t.on{opacity:1}
 .tlist__t h3{font-size:var(--fs-title);font-weight:800;text-transform:uppercase;
   line-height:var(--lh-tight);letter-spacing:0}
-.tlist__t b{display:block;margin-top:26px;font-weight:800;font-size:var(--fs-h3)}
+.tlist__t b{display:block;margin-top:26px;font-weight:800;font-size:var(--fs-h6)}
 .tlist__row{grid-column:3;padding-bottom:clamp(30px,3.6vw,56px)}
 .tlist__row > i{display:grid;grid-template-columns:minmax(0,601fr) minmax(0,601fr);
   gap:clamp(20px,2.5vw,38px)}
@@ -284,7 +292,7 @@ h1,h2,h3,h4,p,dd,dt,figure{margin:0}
 .tile img{width:100%;height:100%;object-fit:cover;transition:transform .8s var(--ease),filter .5s ease}
 .tile__in{position:absolute;inset:auto 0 0 0;padding:26px;color:var(--white);
   background:linear-gradient(180deg,rgba(20,20,20,0),var(--black-overlay));transition:background .45s ease}
-.tile__in h3{font-size:var(--fs-h3);font-weight:800;line-height:1.1}
+.tile__in h3{font-size:var(--fs-h6);font-weight:800;line-height:1.1}
 .tile__in p{max-width:var(--measure);margin-top:6px;font-size:var(--fs-cardbody);line-height:1.35;
   overflow:hidden;max-height:0;opacity:0;transform:translateY(10px);
   transition:opacity .4s ease,transform .5s var(--ease),max-height .5s var(--ease)}
@@ -297,7 +305,7 @@ h1,h2,h3,h4,p,dd,dt,figure{margin:0}
    ============================================================ */
 /* six tracks so three sit on the top row and the last two centre under them */
 .awards{display:grid;grid-template-columns:repeat(6,1fr);justify-items:center;
-  column-gap:var(--gut);row-gap:var(--gut)}
+  column-gap:var(--sp-2);row-gap:var(--sp-1)}
 .awards li{grid-column:span 2;max-width:340px;text-align:center}
 .awards li:nth-child(4):nth-last-child(2){grid-column:2/span 2}
 .awards li:nth-child(5):nth-last-child(1){grid-column:4/span 2}
@@ -306,7 +314,7 @@ h1,h2,h3,h4,p,dd,dt,figure{margin:0}
 .awards__badge img{max-height:var(--badge);max-width:100%;width:auto;height:auto}
 .awards__badge--ph{border:var(--stroke-light) dashed var(--accent);border-radius:999px;background:var(--panel);
   width:clamp(120px,11vw,168px);margin-inline:auto}
-.awards h3{font-size:var(--fs-h3);font-weight:800;line-height:1.2}
+.awards h3{font-size:var(--fs-h6);font-weight:800;line-height:1.2}
 .awards p{margin-top:10px;margin-inline:auto;max-width:26ch;
   font-size:var(--fs-cardbody);color:var(--grey);line-height:1.35}
 
@@ -319,9 +327,9 @@ h1,h2,h3,h4,p,dd,dt,figure{margin:0}
   font-weight:800;color:var(--cheap-glass);pointer-events:none;user-select:none}
 #press .row{position:relative;z-index:1}
 /* the heading sits exactly one row-gap above the first line of quotes */
-#press .headrow{margin-bottom:var(--gut)}
+#press .headrow{margin-bottom:var(--sp-1)}
 .quotes{display:grid;grid-template-columns:repeat(3,1fr);
-  column-gap:var(--gut);row-gap:var(--gut);position:relative}
+  column-gap:var(--sp-1);row-gap:var(--sp-1);position:relative}
 .quotes > li > i{display:block}
 .sec--dark .quotes__m{color:var(--grey)}
 .quotes__m{display:block;line-height:0;margin-bottom:20px;
@@ -378,7 +386,7 @@ h1,h2,h3,h4,p,dd,dt,figure{margin:0}
 .ig__av{width:36px;height:36px;border-radius:999px;background:var(--ink);color:var(--white);display:grid;place-items:center}
 .ig__dot{width:8px;height:8px;border-radius:999px;background:var(--accent);display:inline-block}
 .ig__stats{display:flex;gap:clamp(18px,2.4vw,40px);margin-left:auto}
-.ig__stats dt{font-weight:800;font-size:var(--fs-h3);line-height:1}
+.ig__stats dt{font-weight:800;font-size:var(--fs-h6);line-height:1}
 .ig__stats dd{margin:4px 0 0;font-size:var(--fs-cardbody);color:var(--grey)}
 .ig__grid{display:grid;grid-template-columns:repeat(4,1fr);gap:18px}
 .ig__grid a{position:relative;display:block;border-radius:var(--r-img);overflow:hidden}
@@ -421,18 +429,25 @@ h1,h2,h3,h4,p,dd,dt,figure{margin:0}
 
     /* Figma · Typography, Mobile column. fitHeads() shrinks a heading only
        when its own longest word would not fit the gutter, so nothing overruns. */
-    --fs-display:144px;
+    --fs-ldisplay:288px;
+    --fs-display:152px;
     --fs-h1:96px;
-    --fs-h2:48px;        /* Title — fitSlogan() steps down to Large subtitle when needed */
-    --fs-title:48px;
-    --fs-lsub:36px;
-    --fs-sub:20px;
+    --fs-h2:64px;
+    --fs-h3:48px;
+    --fs-h4:40px;
+    --fs-h5:24px;
+    --fs-h6:20px;
     --fs-body:16px;
     --fs-caption:10px;
     --fs-btn:16px;
     --fs-bigbtn:20px;
-    --fs-ldisplay:280px;
-    --ladder:144 96 64 48 36 20 16;
+    --ladder:288 152 96 64 48 40 24 20 16;
+
+    /* иерархия: поле секции > между блоками > внутри группы */
+    --pad-sec:56px;
+    --sp-1:32px;
+    --sp-2:16px;
+    --lap:24px;
 
     /* Figma · Button padding, Mobile column */
     --btn-px:24px;    --btn-py:16px;
@@ -445,7 +460,7 @@ h1,h2,h3,h4,p,dd,dt,figure{margin:0}
 
   /* ---- numbers: one figure a row, label right-aligned beside it ---- */
   .nums__row{flex-direction:column;align-items:stretch;justify-content:flex-start}
-  .nums__c{flex:0 0 auto;width:100%;flex-direction:row;align-items:flex-end;
+  .nums__c{flex:0 0 auto;width:100%;flex-direction:row;align-items:flex-end;align-items:last baseline;
     justify-content:space-between;gap:14px;padding-inline:0}
   .nums__c + .nums__c::before{display:none}
   .nums__n{flex:0 0 auto;letter-spacing:-.02em}
@@ -459,14 +474,14 @@ h1,h2,h3,h4,p,dd,dt,figure{margin:0}
   .tile__in p{opacity:1;transform:none;max-height:9em}
 
   /* ---- awards ---- */
-  .awards{grid-template-columns:repeat(2,1fr);column-gap:22px;row-gap:var(--gut)}
+  .awards{grid-template-columns:repeat(2,1fr);column-gap:var(--sp-2);row-gap:var(--sp-1)}
   .awards li,
   .awards li:nth-child(4):nth-last-child(2){grid-column:auto}
   .awards li:nth-child(5):nth-last-child(1){grid-column:1/-1}
   .awards__badge{--badge:112px;margin-bottom:18px}
 
   /* ---- press: the mark sits on its quote, the quotes sit further apart ---- */
-  .quotes{grid-template-columns:minmax(0,1fr);row-gap:var(--gut)}
+  .quotes{grid-template-columns:minmax(0,1fr);row-gap:var(--sp-1)}
   .quotes__m{font-size:30px;line-height:.48;margin-bottom:2px}
   .quotes blockquote{max-width:none}
   .quotes__src{margin-top:18px}
@@ -489,6 +504,8 @@ h1,h2,h3,h4,p,dd,dt,figure{margin:0}
     gap:var(--gut);padding:var(--gut) 0 0;color:var(--ink)}
   .careers__l{width:100%}
   .careers .h2--light{color:var(--ink)}
+  /* Big Button — десктопный размер; на телефоне берём обычный Button */
+  .btn--lg{padding:var(--btn-py) var(--btn-px);font-size:var(--fs-btn)}
   .careers__in p{margin-top:16px;color:var(--grey)}
 
   /* ---- Follow прижат к правому краю ---- */
@@ -496,14 +513,16 @@ h1,h2,h3,h4,p,dd,dt,figure{margin:0}
 
   .tlist{grid-template-columns:5px minmax(0,1fr);column-gap:14px}
   .tlist__bar{grid-column:1;grid-row:1/-1}
-  .tlist__t{grid-column:2;padding-bottom:18px}
-  .tlist__t h3{font-size:var(--fs-lsub)}
+  .tlist__t{grid-column:2;padding-bottom:18px;
+    display:flex;align-items:last baseline;justify-content:space-between;gap:var(--sp-2)}
+  .tlist__t h3{font-size:var(--fs-lsub);flex:1 1 auto;min-width:0}
+  .tlist__t b{flex:0 0 auto;margin-top:0}
   .tlist__t p{max-width:none}
   .tlist__row{grid-column:2;padding-bottom:var(--gut)}
   /* фото уходит во флоат, текст его обнимает */
   .tlist__row > i{display:block}
   .tlist__row > i::after{content:"";display:block;clear:both}
-  .tlist__row img{float:left;width:46%;aspect-ratio:4/3;margin:4px 16px 8px 0}
+  .tlist__row img{float:right;width:46%;aspect-ratio:4/3;margin:4px 0 8px var(--sp-2)}
   /* линейка больше не висит над текстом — она отделяет один год от другого */
   .tlist__row .tx{border-top:0;padding-top:0}
   .tlist__t{border-top:var(--stroke-light) solid var(--hair);padding-top:var(--gut)}
