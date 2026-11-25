@@ -139,6 +139,7 @@ window.MINERS = {
   collabs: [
     'collab-belevels', 'collab-hm', 'collab-nyx',
     'collab-lululemon', 'collab-milbok', 'collab-lotus-biscoff',
-    'collab-vilgain', 'collab-furiosa', 'collab-padel-powers'
+    'collab-vilgain', 'collab-furiosa', 'collab-oatly',
+    'collab-padel-powers'
   ]
 };

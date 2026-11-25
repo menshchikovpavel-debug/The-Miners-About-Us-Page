@@ -321,7 +321,7 @@ h1,h2,h3,h4,p,dd,dt,figure{margin:0}
   width:clamp(120px,11vw,168px);margin-inline:auto}
 .awards h3{font-size:var(--fs-h6);font-weight:800;line-height:1.2}
 .awards p{margin-top:10px;margin-inline:auto;max-width:26ch;
-  font-size:var(--fs-cardbody);color:var(--grey);line-height:1.35}
+  font-size:var(--fs-cardbody);color:var(--ink);line-height:1.35}
 
 /* ============================================================
    05 — press, as pull quotes on blue
@@ -381,6 +381,13 @@ h1,h2,h3,h4,p,dd,dt,figure{margin:0}
 .logos li::after{content:"";position:absolute;left:0;right:0;top:0;height:var(--stroke-light);background:var(--hair)}
 .logos li:nth-child(-n+3)::after{display:none}
 .logos img{max-height:clamp(46px,5.8vw,88px);max-width:80%;width:auto;object-fit:contain}
+/* одинокий логотип в неполном последнем ряду закрывается сам:
+   верхняя линия на всю ширину, справа и снизу — по своей ячейке */
+.logos li:last-child:nth-child(3n+1)::after{right:-200%}
+.logos li:last-child:nth-child(3n+1){
+  border-right:var(--stroke-light) solid var(--hair);
+  border-bottom:var(--stroke-light) solid var(--hair)}
+.logos:has(li:last-child:nth-child(3n+1)){border-bottom:0}
 
 /* ============================================================
    careers · instagram · footer
@@ -402,25 +409,32 @@ h1,h2,h3,h4,p,dd,dt,figure{margin:0}
 .btn--lg{padding:var(--btn-lg-py) var(--btn-lg-px);font-size:var(--fs-bigbtn);flex:0 0 auto}
 
 
-.ig__head > i{display:flex;align-items:center;gap:clamp(20px,3vw,48px);flex-wrap:wrap;margin-bottom:clamp(20px,2.6vw,34px)}
-.ig__id{display:flex;align-items:center;gap:12px;font-weight:500}
-.ig__av{width:36px;height:36px;border-radius:999px;background:var(--ink);color:var(--white);display:grid;place-items:center}
-.ig__dot{width:8px;height:8px;border-radius:999px;background:var(--accent);display:inline-block}
-.ig__stats{display:flex;gap:clamp(18px,2.4vw,40px);margin-left:auto}
-.ig__stats dt{font-weight:800;font-size:var(--fs-h6);line-height:1}
-.ig__stats dd{margin:4px 0 0;font-size:var(--fs-cardbody);color:var(--grey)}
-.ig__grid{display:grid;grid-template-columns:repeat(4,1fr);gap:18px}
+/* профиль по фрейму Figma 5278:7059: аватар 68, ник с галочкой,
+   три счётчика числом над подписью, кнопка под ними слева */
+.ig__head > i{display:flex;flex-direction:column;align-items:flex-start;gap:22px;margin-bottom:20px}
+.ig__row{display:flex;align-items:flex-start;gap:22px;width:100%;max-width:520px}
+.ig__av{width:68px;height:68px;border-radius:999px;background:var(--ink);color:var(--white);
+  display:grid;place-items:center;flex:0 0 auto}
+.ig__id{flex:1 1 auto;min-width:0;display:flex;flex-direction:column;gap:22px}
+.ig__name{display:flex;align-items:center;gap:2px;font-size:var(--fs-body)}
+.ig__name b{font-weight:400}
+.ig__check{width:11px;height:11px;flex:0 0 auto;color:var(--blue);display:block}
+.ig__stats{display:flex;justify-content:space-between;gap:12px;width:100%;margin:0}
+.ig__stats > div{display:flex;flex-direction:column;gap:12px}
+.ig__stats dt{font-size:var(--fs-body);font-weight:400;line-height:1}
+.ig__stats dd{margin:0;font-size:var(--fs-body);line-height:1}
+/* во фрейме у кнопки радиус карточки, а не кнопочный */
+.btn--ig{border-radius:var(--r-card)}
+.ig__grid{display:grid;grid-template-columns:repeat(4,1fr);gap:8px}
 .ig__grid a{position:relative;display:block;border-radius:var(--r-img);overflow:hidden}
 .ig__grid img{width:100%;aspect-ratio:3/4;object-fit:cover;transition:transform .7s var(--ease)}
 .ig__grid a:hover img{transform:scale(1.04)}
-.ig__grid span{position:absolute;left:0;right:0;bottom:0;padding:16px;color:var(--white);font-weight:500;
-  background:linear-gradient(180deg,rgba(20,20,20,0),var(--black-overlay))}
 
 #ig{padding-bottom:var(--pad-sec-b)}
 .ftr{position:relative;z-index:2;background:var(--dark);color:var(--white);border-radius:0;margin-top:0;
   padding:clamp(56px,6vw,100px) 0 clamp(36px,4vw,56px)}
 .ftr__row{display:grid;grid-template-columns:minmax(0,1fr) auto auto;gap:var(--gut);align-items:start}
-.ftr__h{font-size:var(--fs-h2);font-weight:800;line-height:var(--lh-tight);text-transform:uppercase;letter-spacing:0}
+.ftr__h{font-size:var(--fs-h4);font-weight:800;line-height:var(--lh-tight);text-transform:uppercase;letter-spacing:0}
 .ftr__c{margin-top:24px;font-size:var(--fs-cardbody);color:var(--grey)}
 .ftr__cols{display:flex;gap:clamp(36px,4.4vw,70px)}
 .ftr__cols h4{font-size:var(--fs-cardbody);font-weight:800;text-transform:uppercase;letter-spacing:.04em;margin-bottom:18px}
@@ -518,6 +532,11 @@ h1,h2,h3,h4,p,dd,dt,figure{margin:0}
   .logos li:nth-child(odd)::before{display:none}
   .logos li:nth-child(n)::after{display:block}
   .logos li:nth-child(-n+2)::after{display:none}
+  /* правило для трёх колонок здесь не действует — на телефоне их две,
+     иначе линия уезжает за экран и ломает ширину страницы */
+  .logos li:last-child:nth-child(3n+1)::after{right:0}
+  .logos li:last-child:nth-child(3n+1){border-right:0;border-bottom:0}
+  .logos:has(li:last-child:nth-child(3n+1)){border-bottom:var(--stroke-light) solid var(--hair)}
   /* последний ряд неполный — его верхняя линия идёт на всю ширину */
   .logos li:last-child:nth-child(odd)::after{right:-100%}
   /* одинокий последний логотип закрывается сам: линия справа и снизу по своей половине */
@@ -537,10 +556,10 @@ h1,h2,h3,h4,p,dd,dt,figure{margin:0}
   .careers .h2--light{color:var(--ink)}
   /* Big Button — десктопный размер; на телефоне берём обычный Button */
   .btn--lg{padding:var(--btn-py) var(--btn-px);font-size:var(--fs-btn)}
-  .careers__in p{margin-top:16px;color:var(--grey)}
+  .careers__in p{margin-top:16px;color:var(--ink)}
 
   /* ---- Follow прижат к правому краю ---- */
-  .ig__head .btn{margin-left:auto}
+
 
   .tlist{grid-template-columns:5px minmax(0,1fr);column-gap:14px}
   .tlist__bar{grid-column:1;grid-row:1/-1}
@@ -561,14 +580,13 @@ h1,h2,h3,h4,p,dd,dt,figure{margin:0}
   .tlist__bar + .tlist__t{border-top:0;padding-top:0}
 
   /* ---- instagram: a swipeable strip instead of an endless column ---- */
-  .ig__grid{display:flex;grid-template-columns:none;gap:12px;overflow-x:auto;
+  .ig__grid{display:flex;grid-template-columns:none;gap:8px;overflow-x:auto;
     scroll-snap-type:x mandatory;-webkit-overflow-scrolling:touch;
     margin-inline:calc(-1 * var(--gut));padding:0 var(--gut) 10px;
     scroll-padding-left:var(--gut);
     scrollbar-width:none}
   .ig__grid::-webkit-scrollbar{display:none}
-  .ig__grid > li{flex:0 0 76%;scroll-snap-align:start}
-  .ig__stats{margin-left:0}
+  .ig__grid > li{flex:0 0 78%;scroll-snap-align:start}
 
   /* ---- the revolver card: title over caption, not beside it ---- */
   .dcard__top{flex-direction:column;align-items:stretch;gap:10px}
