@@ -172,7 +172,9 @@
       nEls.forEach(function (e) { e.style.marginBottom = ''; e.style.marginLeft = ''; });
       lEls.forEach(function (e) { e.style.marginLeft = ''; });
       var rows = cols.reduce(function (a, c) { return a + c.getBoundingClientRect().height; }, 0);
-      var top = hd + lerp(24, 14, k), bot = lerp(24, 14, k);
+      // белая секция наезжает на панель на --lap, последняя подпись не должна туда попасть
+      var lap = parseFloat(getComputedStyle(document.documentElement).getPropertyValue('--lap')) || 0;
+      var top = hd + lerp(24, 14, k), bot = lap + lerp(24, 14, k);
       var free = h - top - bot - rows;
       numsRow.style.paddingTop = top + 'px';
       numsRow.style.rowGap = Math.max(6, lerp(Math.max(0, free / 3), 10, k)) + 'px';
@@ -411,11 +413,14 @@
 
   // the hero sets a word to a line on a phone, so nothing hangs alone
   function heroLines() {
-    var on = narrow();
+    var on = narrow(), step = 0;
     [].forEach.call(document.querySelectorAll('.hero .display .up > i'), function (i) {
       if (!i.dataset.txt) i.dataset.txt = i.textContent;
+      // каждое слово выезжает своим шагом, сквозной счётчик по всему заголовку
       var want = on
-        ? i.dataset.txt.trim().split(/\s+/).map(function (w) { return '<span>' + w + '</span>'; }).join('')
+        ? i.dataset.txt.trim().split(/\s+/).map(function (w) {
+            return '<span style="transition-delay:' + (step++ * 110) + 'ms">' + w + '</span>';
+          }).join('')
         : i.dataset.txt;
       if (i.innerHTML !== want) i.innerHTML = want;
     });

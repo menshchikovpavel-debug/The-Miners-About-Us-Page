@@ -77,7 +77,7 @@
   --lap:40px;            /* how far each section rides over the one above */
   --hdr-h:92px;          /* one height, start to finish */
   --hdr-solid:92px;
-  --pad-sec:clamp(56px,6.6vw,100px);
+  --pad-sec:var(--gut);   /* поле сверху/снизу = поле сбоку */
   --ease:cubic-bezier(.4,0,.2,1);
 
   /* aliases kept so the rest of the sheet reads in design words */
@@ -161,6 +161,13 @@ h1,h2,h3,h4,p,dd,dt,figure{margin:0}
   background:linear-gradient(180deg,rgba(20,20,20,.34) 0,rgba(20,20,20,.02) 34%,rgba(20,20,20,.34) 100%)}
 .hero__in{position:relative;z-index:1;color:var(--white);padding-bottom:clamp(56px,7.4vw,112px)}
 .hero .display .up > i > span{display:block}
+@media (max-width:760px){
+  /* на телефоне строка разбита на слова — анимируем их, а не группу */
+  .hero .display .up > i{opacity:1;transform:none;transition:none}
+  .hero .display .up > i > span{transform:translateY(102%);
+    transition:transform .8s var(--ease)}
+  .hero .display .up.in > i > span{transform:none}
+}
 .display{font-size:var(--fs-display);font-weight:800;line-height:var(--lh-tight);
   text-transform:uppercase;letter-spacing:0}
 
@@ -187,15 +194,15 @@ h1,h2,h3,h4,p,dd,dt,figure{margin:0}
 .accent{color:var(--accent)}
 .ph{display:inline-block;background:var(--grey);color:var(--accent);padding:1px 8px;border-radius:4px;font-weight:500;font-size:.92em}
 .headrow{display:grid;grid-template-columns:minmax(0,900fr) minmax(0,420fr);column-gap:38px;
-  align-items:start;margin-bottom:clamp(30px,3.6vw,54px)}
+  align-items:start;margin-bottom:var(--gut)}
 .headrow--kick{grid-template-columns:minmax(0,420fr) minmax(0,900fr);align-items:baseline}
 .headrow__t p{max-width:var(--measure);font-size:var(--fs-cardbody);line-height:1.33}
 
 /* ---------- 01 story ---------- */
 .story{display:grid;grid-template-columns:420fr 894fr;column-gap:38px;align-items:start;margin-top:28px}
-.story__txt{margin-top:34px}
+.story__txt{margin-top:var(--gut)}
 .story__txt p{max-width:var(--measure);margin-bottom:20px}
-.story__founders{margin-top:34px;margin-bottom:0}
+.story__founders{margin-top:var(--gut);margin-bottom:0}
 .story__founders b{font-weight:500}
 .story__fig img{width:100%;aspect-ratio:894/679;object-fit:cover;border-radius:var(--r-img)}
 
@@ -290,7 +297,7 @@ h1,h2,h3,h4,p,dd,dt,figure{margin:0}
    ============================================================ */
 /* six tracks so three sit on the top row and the last two centre under them */
 .awards{display:grid;grid-template-columns:repeat(6,1fr);justify-items:center;
-  column-gap:clamp(24px,3vw,56px);row-gap:clamp(40px,5vw,84px)}
+  column-gap:var(--gut);row-gap:var(--gut)}
 .awards li{grid-column:span 2;max-width:340px;text-align:center}
 .awards li:nth-child(4):nth-last-child(2){grid-column:2/span 2}
 .awards li:nth-child(5):nth-last-child(1){grid-column:4/span 2}
@@ -312,9 +319,9 @@ h1,h2,h3,h4,p,dd,dt,figure{margin:0}
   font-weight:800;color:var(--cheap-glass);pointer-events:none;user-select:none}
 #press .row{position:relative;z-index:1}
 /* the heading sits exactly one row-gap above the first line of quotes */
-#press .headrow{margin-bottom:clamp(48px,7.4vw,120px)}
+#press .headrow{margin-bottom:var(--gut)}
 .quotes{display:grid;grid-template-columns:repeat(3,1fr);
-  column-gap:clamp(36px,6.4vw,110px);row-gap:clamp(48px,7.4vw,120px);position:relative}
+  column-gap:var(--gut);row-gap:var(--gut);position:relative}
 .quotes > li > i{display:block}
 .sec--dark .quotes__m{color:var(--grey)}
 .quotes__m{display:block;line-height:0;margin-bottom:20px;
@@ -360,7 +367,7 @@ h1,h2,h3,h4,p,dd,dt,figure{margin:0}
 .careers__in p{margin-top:18px;max-width:var(--measure);color:var(--grey);font-size:var(--fs-cardbody)}
 .careers__l{min-width:0}
 .btn{display:inline-block;background:var(--accent);color:var(--white);font-weight:500;font-size:var(--fs-btn);
-  padding:var(--btn-py) var(--btn-px);border-radius:999px;transition:transform .2s ease,filter .2s ease}
+  padding:var(--btn-py) var(--btn-px);border-radius:var(--r-reg);transition:transform .2s ease,filter .2s ease}
 .btn:hover{transform:translateY(-2px);filter:brightness(1.06)}
 .btn--sm{padding:var(--btn-sm-py) var(--btn-sm-px);font-size:var(--fs-btn)}
 .btn--lg{padding:var(--btn-lg-py) var(--btn-lg-px);font-size:var(--fs-bigbtn);flex:0 0 auto}
@@ -410,7 +417,7 @@ h1,h2,h3,h4,p,dd,dt,figure{margin:0}
   .var__tag{position:static;display:inline-block;margin-bottom:12px}
 }
 @media (max-width:760px){
-  :root{--gut:16px;--hdr-h:64px;--hdr-solid:64px;
+  :root{--gut:32px;--hdr-h:64px;--hdr-solid:64px;
 
     /* Figma · Typography, Mobile column. fitHeads() shrinks a heading only
        when its own longest word would not fit the gutter, so nothing overruns. */
@@ -438,7 +445,7 @@ h1,h2,h3,h4,p,dd,dt,figure{margin:0}
 
   /* ---- numbers: one figure a row, label right-aligned beside it ---- */
   .nums__row{flex-direction:column;align-items:stretch;justify-content:flex-start}
-  .nums__c{flex:0 0 auto;width:100%;flex-direction:row;align-items:baseline;
+  .nums__c{flex:0 0 auto;width:100%;flex-direction:row;align-items:flex-end;
     justify-content:space-between;gap:14px;padding-inline:0}
   .nums__c + .nums__c::before{display:none}
   .nums__n{flex:0 0 auto;letter-spacing:-.02em}
@@ -452,14 +459,14 @@ h1,h2,h3,h4,p,dd,dt,figure{margin:0}
   .tile__in p{opacity:1;transform:none;max-height:9em}
 
   /* ---- awards ---- */
-  .awards{grid-template-columns:repeat(2,1fr);column-gap:22px;row-gap:46px}
+  .awards{grid-template-columns:repeat(2,1fr);column-gap:22px;row-gap:var(--gut)}
   .awards li,
   .awards li:nth-child(4):nth-last-child(2){grid-column:auto}
   .awards li:nth-child(5):nth-last-child(1){grid-column:1/-1}
   .awards__badge{--badge:112px;margin-bottom:18px}
 
   /* ---- press: the mark sits on its quote, the quotes sit further apart ---- */
-  .quotes{grid-template-columns:minmax(0,1fr);row-gap:72px}
+  .quotes{grid-template-columns:minmax(0,1fr);row-gap:var(--gut)}
   .quotes__m{font-size:30px;line-height:.48;margin-bottom:2px}
   .quotes blockquote{max-width:none}
   .quotes__src{margin-top:18px}
@@ -472,17 +479,35 @@ h1,h2,h3,h4,p,dd,dt,figure{margin:0}
   .logos li:nth-child(n)::after{display:block}
   .logos li:nth-child(-n+2)::after{display:none}
 
-  /* ---- careers: a portrait card, everything stacked ---- */
-  .careers{aspect-ratio:320/300;min-height:0}
-  .careers__in{flex-direction:column;align-items:flex-start;gap:22px;padding:24px}
+  /* ---- хайринг: фото отдельно, текст отдельно ---- */
+  .careers{aspect-ratio:auto;min-height:0;display:block;overflow:visible;border-radius:0}
+  .careers > i{display:block;width:100%}
+  .careers::after{display:none}
+  .careers__img{position:static;width:100%;height:auto;aspect-ratio:4/3;
+    border-radius:var(--r-card)}
+  .careers__in{position:static;flex-direction:column;align-items:flex-start;
+    gap:var(--gut);padding:var(--gut) 0 0;color:var(--ink)}
   .careers__l{width:100%}
+  .careers .h2--light{color:var(--ink)}
+  .careers__in p{margin-top:16px;color:var(--grey)}
+
+  /* ---- Follow прижат к правому краю ---- */
+  .ig__head .btn{margin-left:auto}
 
   .tlist{grid-template-columns:5px minmax(0,1fr);column-gap:14px}
   .tlist__bar{grid-column:1;grid-row:1/-1}
-  .tlist__t{grid-column:2;padding-bottom:20px}
+  .tlist__t{grid-column:2;padding-bottom:18px}
   .tlist__t h3{font-size:var(--fs-lsub)}
   .tlist__t p{max-width:none}
-  .tlist__row{grid-column:2}
+  .tlist__row{grid-column:2;padding-bottom:var(--gut)}
+  /* фото уходит во флоат, текст его обнимает */
+  .tlist__row > i{display:block}
+  .tlist__row > i::after{content:"";display:block;clear:both}
+  .tlist__row img{float:left;width:46%;aspect-ratio:4/3;margin:4px 16px 8px 0}
+  /* линейка больше не висит над текстом — она отделяет один год от другого */
+  .tlist__row .tx{border-top:0;padding-top:0}
+  .tlist__t{border-top:var(--stroke-light) solid var(--hair);padding-top:var(--gut)}
+  .tlist__t:first-of-type{border-top:0;padding-top:0}
 
   /* ---- instagram: a swipeable strip instead of an endless column ---- */
   .ig__grid{display:flex;grid-template-columns:none;gap:12px;overflow-x:auto;
