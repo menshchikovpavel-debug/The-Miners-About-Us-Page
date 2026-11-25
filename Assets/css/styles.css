@@ -350,10 +350,8 @@ h1,h2,h3,h4,p,dd,dt,figure{margin:0}
 .quotes > li > i{display:flex;flex-direction:column;gap:var(--sp-2);
   height:100%;padding:var(--sp-2)}
 .quotes__top{display:flex;align-items:flex-start;justify-content:space-between;gap:16px}
-.sec--dark .quotes__m{color:var(--grey)}
-.quotes__m{display:block;line-height:0;flex:0 0 auto;
-  color:var(--grey);transition:color .3s ease}
-.quotes__m svg{height:48px;width:auto;display:block}
+.quotes__m{display:block;line-height:0;flex:0 0 auto;color:var(--white)}
+.quotes__m svg{height:32px;width:auto;display:block}
 /* карточки тянутся по самой высокой — прижимаем цитату к низу,
    чтобы короткая не оставляла дыру под собой */
 .quotes blockquote{margin:auto 0 0;max-width:none;font-size:var(--fs-sub);font-weight:400;
@@ -370,7 +368,6 @@ h1,h2,h3,h4,p,dd,dt,figure{margin:0}
 .quotes__src img[src*="forbes"]{height:25px}
 .quotes__src img[src*="wcp"]{height:22px}
 .quotes__src img[src*="arquitectura"]{height:31px}
-.sec--dark .quotes > li:hover .quotes__m{color:var(--on-accent)}
 .quotes > li:hover .quotes__src img{opacity:1}
 
 /* ============================================================
@@ -510,7 +507,7 @@ h1,h2,h3,h4,p,dd,dt,figure{margin:0}
   .awards__badge{--badge:112px;margin-bottom:18px}
 
   /* ---- press: the mark sits on its quote, the quotes sit further apart ---- */
-  .quotes__m svg{height:40px}
+  .quotes__m svg{height:24px}
   .quotes__m{font-size:30px;line-height:.48;margin-bottom:2px}
   .quotes blockquote{max-width:none}
 
