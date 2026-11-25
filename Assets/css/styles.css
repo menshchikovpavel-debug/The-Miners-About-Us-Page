@@ -78,7 +78,9 @@
   --hdr-h:92px;          /* one height, start to finish */
   --hdr-solid:92px;
   /* Иерархия: от края — самое большое, глубже в группу — меньше */
-  --pad-sec:var(--gut);  /* поле секции сверху/снизу = боковому */
+  --pad-sec:var(--gut);  /* поле секции сверху = боковому */
+  --pad-sec-b:120px;     /* снизу больше — перед следующей секцией */
+  --sp-3:30px;           /* внутри пары «текст — подпись» */
   --sp-1:56px;           /* между крупными блоками секции */
   --sp-2:32px;           /* внутри группы */
   --ease:cubic-bezier(.4,0,.2,1);
@@ -183,8 +185,8 @@ h1,h2,h3,h4,p,dd,dt,figure{margin:0}
    ============================================================ */
 .sec{position:relative;border-radius:var(--r-sec) var(--r-sec) 0 0;margin-top:calc(-1 * var(--lap));
   padding-top:var(--pad-sec);
-  /* следующая секция съедает --lap снизу — компенсируем, чтобы видимое поле равнялось --pad-sec */
-  padding-bottom:calc(var(--pad-sec) + var(--lap))}
+  /* следующая секция съедает --lap снизу — компенсируем, чтобы видимое поле равнялось --pad-sec-b */
+  padding-bottom:calc(var(--pad-sec-b) + var(--lap))}
 .sec--white{background:var(--white)}
 .sec--light{background:var(--light)}
 .sec--dark{background:var(--accent);color:var(--on-accent)}
@@ -212,7 +214,7 @@ h1,h2,h3,h4,p,dd,dt,figure{margin:0}
 .story .kicker{margin-bottom:var(--sp-2)}
 .story__txt{margin-top:var(--sp-1)}
 .story__txt p{max-width:var(--measure);margin-bottom:var(--sp-2)}
-.story__founders{margin-top:var(--sp-1);margin-bottom:0}
+.story__txt .story__founders{margin-top:var(--sp-1);margin-bottom:0}
 .story__founders b{font-weight:500}
 .story__fig img{width:100%;aspect-ratio:894/679;object-fit:cover;border-radius:var(--r-img)}
 
@@ -246,7 +248,7 @@ h1,h2,h3,h4,p,dd,dt,figure{margin:0}
 .drum__track{position:relative;height:100%}
 .dcard{position:absolute;top:0;left:0;height:100%;background:var(--white);border:var(--stroke-light) solid var(--hair);
   will-change:transform,opacity;
-  border-radius:16px;padding:30px;display:flex;flex-direction:column}
+  border-radius:var(--r-card);padding:30px;display:flex;flex-direction:column}
 .dcard__a{display:flex;flex-direction:column;height:100%;color:inherit}
 .dcard__top{display:flex;align-items:flex-end;justify-content:space-between;gap:24px;margin-bottom:26px}
 .dcard__t{flex:1 1 auto;min-width:0}
@@ -338,7 +340,7 @@ h1,h2,h3,h4,p,dd,dt,figure{margin:0}
   color:var(--grey);transition:color .3s ease}
 .quotes__m svg{height:32px;width:auto;display:block}
 .quotes blockquote{margin:0;max-width:26ch;font-size:var(--fs-sub);font-weight:400;line-height:1.35}
-.quotes__src{display:flex;align-items:center;margin-top:30px;min-height:46px}
+.quotes__src{display:flex;align-items:center;margin-top:var(--sp-3);min-height:46px}
 /* the marks are solid artwork — knocked out white, then held back until hover */
 .quotes__src img{width:auto;max-width:230px;object-fit:contain;object-position:left center;
   opacity:.75;transition:opacity .3s ease}
@@ -398,7 +400,7 @@ h1,h2,h3,h4,p,dd,dt,figure{margin:0}
 .ig__grid span{position:absolute;left:0;right:0;bottom:0;padding:16px;color:var(--white);font-weight:500;
   background:linear-gradient(180deg,rgba(20,20,20,0),var(--black-overlay))}
 
-#ig{padding-bottom:var(--pad-sec)}
+#ig{padding-bottom:var(--pad-sec-b)}
 .ftr{position:relative;z-index:2;background:var(--dark);color:var(--white);border-radius:0;margin-top:0;
   padding:clamp(56px,6vw,100px) 0 clamp(36px,4vw,56px)}
 .ftr__row{display:grid;grid-template-columns:minmax(0,1fr) auto auto;gap:var(--gut);align-items:start}
@@ -428,7 +430,9 @@ h1,h2,h3,h4,p,dd,dt,figure{margin:0}
   .var__tag{position:static;display:inline-block;margin-bottom:12px}
 }
 @media (max-width:760px){
-  :root{--gut:32px;--hdr-h:64px;--hdr-solid:64px;
+  :root{--gut:24px;--hdr-h:64px;--hdr-solid:64px;
+    --r-sec:var(--r-card);   /* на телефоне секция скругляется как карточка — 16 */
+    --nums-gap:80px;         /* шаг между большими цифрами, из мобильного фрейма */
 
     /* Figma · Typography, Mobile column. fitHeads() shrinks a heading only
        when its own longest word would not fit the gutter, so nothing overruns. */
@@ -447,9 +451,11 @@ h1,h2,h3,h4,p,dd,dt,figure{margin:0}
     --ladder:288 152 96 64 48 40 24 20 16;
 
     /* иерархия: поле секции > между блоками > внутри группы */
-    --pad-sec:var(--gut);  /* 32 — как боковой отступ */
+    --pad-sec:32px;        /* сверху */
+    --pad-sec-b:56px;      /* снизу больше — перед следующей секцией */
     --sp-1:24px;
     --sp-2:14px;
+    --sp-3:10px;
 
     /* Figma · Button padding, Mobile column */
     --btn-px:24px;    --btn-py:16px;
@@ -461,7 +467,9 @@ h1,h2,h3,h4,p,dd,dt,figure{margin:0}
   .hero{height:92svh}
 
   /* ---- numbers: one figure a row, label right-aligned beside it ---- */
-  .nums__row{flex-direction:column;align-items:stretch;justify-content:flex-start}
+  .nums{height:auto}
+  .nums__panel{position:static;height:auto}
+  .nums__row{flex-direction:column;align-items:stretch;justify-content:flex-start;height:auto}
   .nums__c{flex:0 0 auto;width:100%;flex-direction:row;align-items:flex-end;align-items:last baseline;
     justify-content:space-between;gap:14px;padding-inline:0}
   .nums__c + .nums__c::before{display:none}
@@ -483,10 +491,13 @@ h1,h2,h3,h4,p,dd,dt,figure{margin:0}
   .awards__badge{--badge:112px;margin-bottom:18px}
 
   /* ---- press: the mark sits on its quote, the quotes sit further apart ---- */
-  .quotes{grid-template-columns:minmax(0,1fr);row-gap:var(--sp-1)}
+  .quotes{grid-template-columns:minmax(0,1fr);row-gap:0}
+  .quotes > li{padding-block:var(--sp-2);border-top:var(--stroke-light) solid var(--hair)}
+  .quotes > li:first-child{padding-top:0;border-top:0}
+  .quotes > li:last-child{padding-bottom:0}
   .quotes__m{font-size:30px;line-height:.48;margin-bottom:2px}
   .quotes blockquote{max-width:none}
-  .quotes__src{margin-top:18px}
+  .quotes__src{margin-top:var(--sp-3)}
 
   /* ---- collaborations: unbroken rules on a two-track grid ---- */
   .logos{grid-template-columns:repeat(2,minmax(0,1fr))}
@@ -497,6 +508,11 @@ h1,h2,h3,h4,p,dd,dt,figure{margin:0}
   .logos li:nth-child(-n+2)::after{display:none}
   /* последний ряд неполный — его верхняя линия идёт на всю ширину */
   .logos li:last-child:nth-child(odd)::after{right:-100%}
+  /* одинокий последний логотип закрывается сам: линия справа и снизу по своей половине */
+  .logos{border-bottom:0}
+  .logos li:last-child:nth-child(odd){
+    border-right:var(--stroke-light) solid var(--hair);
+    border-bottom:var(--stroke-light) solid var(--hair)}
 
   /* ---- хайринг: фото отдельно, текст отдельно ---- */
   .careers{aspect-ratio:auto;min-height:0;display:block;overflow:visible;border-radius:0}
@@ -546,9 +562,15 @@ h1,h2,h3,h4,p,dd,dt,figure{margin:0}
   .dcard__top{flex-direction:column;align-items:stretch;gap:10px}
   /* full width, or the fit test compares the box with its own contents */
   .dcard__t,.dcard__y{max-width:none;text-align:left;flex:0 0 auto;width:100%}
+  .dcard__y{white-space:normal}
   /* ---- variant A: Large subtitle for the title, one rule above the pair ---- */
   .dcard__t{font-size:var(--fs-lsub);max-width:none}
   .dcard__top{margin-bottom:22px}
+  /* .drum__stick держит --hdr-solid сверху ради липкого состояния — до него этот
+     отступ читается как дыра, поэтому ровно на него подтягиваем весь барабан */
+  #drum{margin-top:calc(-1 * var(--hdr-solid))}
+  /* заголовок карточки без пустой строки сверху — на телефоне она выглядит плохо */
+  .dcard__t{min-height:0}
   .dcard__cols{grid-template-columns:minmax(0,1fr);gap:0;margin-top:26px}
   .dcard__cols p{padding-top:26px}
   .dcard__cols p + p{border-top:0;padding-top:0;margin-top:22px}

@@ -138,7 +138,7 @@
     // section — so the white block below squeezes it, with no dwell either side
     var d = Math.max(0, -nums.getBoundingClientRect().top);
     var h = clamp(H - d, MINH, H);
-    numsPanel.style.height = h + 'px';
+    if (!narrow()) numsPanel.style.height = h + 'px';
     var k = clamp((H - h) / Math.max(1, H - MINH), 0, 1);
     var hd = hdrH();        // 0 tall · 1 compact
     if (nums.getBoundingClientRect().top < H * .8) countUp();
@@ -155,19 +155,21 @@
        them small and tight at the top. ---- */
     if (narrow()) {
       // на телефоне панель не сжимается и цифры держат размер — Павел просил
-      // оставить их большими на всём скролле
-      h = H; k = 0;
-      numsPanel.style.height = h + 'px';
+      // оставить их большими на всём скролле. Высота — по содержимому, иначе
+      // остаток 100svh раздувает промежутки между цифрами
+      k = 0;
+      nums.style.height = '';
+      numsPanel.style.height = '';
       // Display is the size in the frame. The only thing that may push it
       // down is a label that cannot wrap any narrower than its longest word.
       var gapX = 14, fitM = Infinity;
       numRatio.forEach(function (r, i) {
         fitM = Math.min(fitM, (total - (labMin[i] || 0) * 16 - gapX) / Math.max(.001, r));
       });
-      var big = Math.min(144, fitM);
-      var fsM = lerp(big, Math.min(big, 56), k);
-      numsRow.style.setProperty('--num-fs', fsM + 'px');
-      numsRow.style.setProperty('--lab-fs', lerp(16, 14, k) + 'px');
+      // Display из таблицы кегелей; если не влезает по ширине — шаг вниз по лестнице
+      var big = stepTo(Math.min(cssPx('--fs-display'), fitM));
+      numsRow.style.setProperty('--num-fs', big + 'px');
+      numsRow.style.setProperty('--lab-fs', cssPx('--fs-body') + 'px');
       numsRow.style.setProperty('--num-pad', '0px');
       cols.forEach(function (c) {
         c.style.width = ''; c.style.paddingInline = ''; c.style.paddingTop = '';
@@ -175,16 +177,16 @@
       });
       nEls.forEach(function (e) { e.style.marginBottom = ''; e.style.marginLeft = ''; });
       lEls.forEach(function (e) { e.style.marginLeft = ''; });
-      var rows = cols.reduce(function (a, c) { return a + c.getBoundingClientRect().height; }, 0);
-      // белая секция наезжает на панель на --lap, последняя подпись не должна туда попасть
-      var lap = parseFloat(getComputedStyle(document.documentElement).getPropertyValue('--lap')) || 0;
-      var top = hd + lerp(24, 14, k), bot = lap + lerp(24, 14, k);
-      var free = h - top - bot - rows;
-      numsRow.style.paddingTop = top + 'px';
-      numsRow.style.rowGap = Math.max(6, lerp(Math.max(0, free / 3), 10, k)) + 'px';
+      // поле сверху равно боковому; снизу добавляем --lap, который съест
+      // белая секция, наезжающая на панель
+      var gutN = cssPx('--gut'), lapN = cssPx('--lap');
+      numsRow.style.paddingTop = gutN + 'px';
+      numsRow.style.paddingBottom = (gutN + lapN) + 'px';
+      numsRow.style.rowGap = cssPx('--nums-gap') + 'px';
       return;
     }
     numsRow.style.paddingTop = '';
+    numsRow.style.paddingBottom = '';
     numsRow.style.rowGap = '';
 
     var per = 4;
@@ -442,8 +444,8 @@
   }
 
   // a section slogan is two lines of copy — on a phone it steps down through the
-  // real tokens (Title 48, then Large subtitle 36) until each half sits on one line
-  var SLOGAN_STEPS = [48, 36];
+  // real tokens (H3 Title 48, then H4 Large subtitle 40) until each half sits on one line
+  var SLOGAN_STEPS = [48, 40];
 
   function fitSlogan(el) {
     var parts = [].slice.call(el.querySelectorAll('.up > i'));
@@ -459,6 +461,17 @@
   // Every size on screen has to be one of the tokens. When a heading will not
   // fit its gutter we do not scale it by a ratio — we step down the ladder to
   // the next kegel in the collection and try again.
+  function cssPx(name) {
+    return parseFloat(getComputedStyle(document.documentElement).getPropertyValue(name)) || 0;
+  }
+
+  // ближайший кегель из лестницы, не больше предела
+  function stepTo(limit) {
+    var steps = ladder();
+    for (var i = 0; i < steps.length; i++) if (steps[i] <= limit + .5) return steps[i];
+    return steps[steps.length - 1];
+  }
+
   function ladder() {
     var raw = getComputedStyle(document.documentElement).getPropertyValue('--ladder');
     var out = raw.trim().split(/\s+/).map(parseFloat).filter(function (n) { return n > 0; });
@@ -511,7 +524,7 @@
 
   /* ---------------- loop ---------------- */
   function layout() {
-    nums.style.height = (vh() + 4) + 'px';
+    nums.style.height = narrow() ? '' : (vh() + 4) + 'px';
     measureNums();
     listRows();
     drumGeo();
