@@ -58,7 +58,8 @@
       '<p' + (a.ph ? ' class="ph"' : '') + '>' + a.d + '</p></i></li>';
   }).join('');
 
-  $('#pressList').innerHTML = D.press.map(function (p) {
+  // шашками: нечётные в левой половине, чётные в правой, каждая на строку ниже
+  $('#pressList').innerHTML = D.press.map(function (p, i) {
     // a drawn mark, not a glyph — 22 × 18 units, set to 32 px tall in CSS
     var mark = '<span class="quotes__m" aria-hidden="true">' +
       '<svg viewBox="0 0 22 18" fill="currentColor" role="presentation">' +
@@ -67,7 +68,8 @@
       '</svg></span>';
     var logo = '<img src="Assets/marks/' + p.mark + '.svg?v=' + MARKV + '" alt="' + p.outlet + '" loading="lazy">';
     var src = p.url ? '<a href="' + p.url + '" target="_blank" rel="noopener">' + logo + '</a>' : logo;
-    return '<li><i>' + mark + '<blockquote>' + p.quote + '</blockquote>' +
+    return '<li class="up" style="grid-row:' + (i + 1) + ';grid-column:' + (i % 2 ? 2 : 1) + '"><i>' +
+      mark + '<blockquote>' + p.quote + '</blockquote>' +
       '<div class="quotes__src">' + src + '</div></i></li>';
   }).join('');
 
@@ -267,48 +269,6 @@
       c.style.opacity = o.toFixed(3);
       c.style.zIndex = String(Math.round(60 - t * 4));
       c.style.transform = 'translate(' + x.toFixed(1) + 'px,' + y.toFixed(1) + 'px)';
-    });
-  }
-
-  /* ============================================================
-     press — вертикальный барабан цитат: активная крупная и белая,
-     соседние мельче и тусклее. Кегель не трогаем — размер даёт scale
-     ============================================================ */
-  var qrev = $('#qrev'), qframe = qrev && qrev.querySelector('.qrev__frame');
-  var qcards = qrev ? [].slice.call($('#pressList').children) : [];
-  var QN = qcards.length;
-  var qG = { step: 200, anchor: 0 };
-
-  function qrevGeo() {
-    if (!qrev || !QN) return;
-    var h = qframe.clientHeight;
-    var tallest = 0;
-    qcards.forEach(function (c) { tallest = Math.max(tallest, c.offsetHeight); });
-    qG.step = Math.max(tallest + (narrow() ? 26 : 40), Math.round(h * .2));
-    qG.anchor = Math.round(h * .16);
-    qrev.style.height = (vh() + (QN - 1) * vh() * .55) + 'px';
-  }
-
-  function qrevFrame() {
-    if (!qrev || !QN) return;
-    var r = qrev.getBoundingClientRect(), runway = r.height - vh();
-    if (runway <= 0) return;
-    var cur = clamp(-r.top / runway, 0, 1) * (QN - 1);
-    qcards.forEach(function (c, i) {
-      var d = i - cur, a = Math.abs(d);
-      if (a > 2.8) { c.style.visibility = 'hidden'; return; }
-      var s = clamp(1 - .26 * a, .48, 1);
-      // белый на активной, дальше гаснет — серый получается из прозрачности,
-      // чтобы в палитре остался только #F7F7F7
-      var o = a <= 1 ? 1 - .3 * a : clamp(.7 - .33 * (a - 1), 0, .7);
-      var k = clamp(1 - a, 0, 1);
-      var y = qG.anchor + qG.step * (d < 0 ? d * .72 : d);
-      c.style.visibility = 'visible';
-      c.style.opacity = o.toFixed(3);
-      c.style.zIndex = String(Math.round(40 - a * 4));
-      c.style.transform = 'translateY(' + y.toFixed(1) + 'px) scale(' + s.toFixed(3) + ')';
-      var im = c.querySelector('.quotes__src img');
-      if (im) im.style.opacity = (.45 + .55 * k).toFixed(3);
     });
   }
 
@@ -570,7 +530,6 @@
     measureNums();
     listRows();
     drumGeo();
-    qrevGeo();
     heroLines();
     fitHeads();
     levelHeads('.dcard__t');
@@ -582,7 +541,7 @@
   function frameTick() {
     lastFrame = performance.now();
     try {
-      revealFrame(); numsFrame(); drumFrame(); qrevFrame(); listFrame(); hdrState();
+      revealFrame(); numsFrame(); drumFrame(); listFrame(); hdrState();
     } finally {
       ticking = false;          // a throw must never strand the loop
     }

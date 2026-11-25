@@ -333,23 +333,22 @@ h1,h2,h3,h4,p,dd,dt,figure{margin:0}
 #press .row{position:relative;z-index:1}
 #press .headrow{margin-bottom:var(--sp-1)}
 
-/* вертикальный барабан: активная цитата крупная и белая, соседние —
-   мельче и тусклее. Размер даёт transform, кегель остаётся токеном */
-.qrev{position:relative;z-index:1}
-.qrev__stick{position:sticky;top:0;height:100svh;
-  padding:var(--hdr-solid) 0 var(--pad-sec-b)}
-.qrev__frame{height:100%}
-.quotes{position:relative;height:100%;display:block;margin:0;padding:0;list-style:none}
-.quotes > li{position:absolute;left:0;top:0;width:100%;max-width:46ch;color:var(--white);
-  transform-origin:left top;will-change:transform,opacity}
+/* секция поделена невидимой стеной пополам: цитаты идут шашками —
+   одна слева, следующая ниже справа. Колонку и строку задаёт app.js */
+.quotes{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));
+  column-gap:var(--sp-1);row-gap:var(--sp-1);position:relative}
+.quotes > li{color:var(--white);min-width:0}
 .quotes > li > i{display:block}
-.quotes__m{display:block;line-height:0;margin-bottom:var(--sp-3);color:inherit}
+.sec--dark .quotes__m{color:var(--grey)}
+.quotes__m{display:block;line-height:0;margin-bottom:var(--sp-3);
+  color:var(--grey);transition:color .3s ease}
 .quotes__m svg{height:32px;width:auto;display:block}
 .quotes blockquote{margin:0;max-width:none;font-size:var(--fs-sub);font-weight:400;
   line-height:1.35;color:inherit}
 .quotes__src{display:flex;align-items:center;margin-top:var(--sp-3);min-height:46px}
 /* the marks are solid artwork — knocked out white, then held back until hover */
-.quotes__src img{width:auto;max-width:230px;object-fit:contain;object-position:left center}
+.quotes__src img{width:auto;max-width:100%;object-fit:contain;object-position:left center;
+  opacity:.75;transition:opacity .3s ease}
 /* one optical size for a row of very different lockups */
 .quotes__src img[src*="monocle"],
 .quotes__src img[src*="standart"],
@@ -357,7 +356,8 @@ h1,h2,h3,h4,p,dd,dt,figure{margin:0}
 .quotes__src img[src*="forbes"]{height:25px}
 .quotes__src img[src*="wcp"]{height:22px}
 .quotes__src img[src*="arquitectura"]{height:31px}
-/* яркость задаёт барабан в app.js, поэтому hover здесь ничего не красит */
+.sec--dark .quotes > li:hover .quotes__m{color:var(--on-accent)}
+.quotes > li:hover .quotes__src img{opacity:1}
 
 /* ============================================================
    06 — collaborations, 3 × 3
@@ -496,7 +496,7 @@ h1,h2,h3,h4,p,dd,dt,figure{margin:0}
 
   /* ---- press: the mark sits on its quote, the quotes sit further apart ---- */
   .quotes__m svg{height:24px}
-  .qrev{margin-top:calc(-1 * var(--hdr-solid))}
+  .quotes{column-gap:var(--sp-2)}
   .quotes__m{font-size:30px;line-height:.48;margin-bottom:2px}
   .quotes blockquote{max-width:none}
   .quotes__src{margin-top:var(--sp-3)}
