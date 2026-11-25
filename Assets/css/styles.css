@@ -333,11 +333,12 @@ h1,h2,h3,h4,p,dd,dt,figure{margin:0}
 #press .row{position:relative;z-index:1}
 #press .headrow{margin-bottom:var(--sp-1)}
 
-/* секция поделена невидимой стеной пополам: цитаты идут шашками —
-   одна слева, следующая ниже справа. Колонку и строку задаёт app.js */
-.quotes{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));
-  column-gap:var(--sp-1);row-gap:var(--sp-1);position:relative}
-.quotes > li{color:var(--white);min-width:0}
+/* шашки: цитата прижата то к левому краю, то к правому. Блок шире половины
+   и спокойно заходит за середину — важна только сторона. Строку задаёт app.js */
+.quotes{display:grid;grid-template-columns:minmax(0,1fr);
+  row-gap:var(--sp-1);position:relative}
+.quotes > li{width:66%;min-width:0;color:var(--white)}
+.quotes > li:nth-child(even){justify-self:end}
 .quotes > li > i{display:block}
 .sec--dark .quotes__m{color:var(--grey)}
 .quotes__m{display:block;line-height:0;margin-bottom:var(--sp-3);
@@ -496,7 +497,6 @@ h1,h2,h3,h4,p,dd,dt,figure{margin:0}
 
   /* ---- press: the mark sits on its quote, the quotes sit further apart ---- */
   .quotes__m svg{height:24px}
-  .quotes{column-gap:var(--sp-2)}
   .quotes__m{font-size:30px;line-height:.48;margin-bottom:2px}
   .quotes blockquote{max-width:none}
   .quotes__src{margin-top:var(--sp-3)}
