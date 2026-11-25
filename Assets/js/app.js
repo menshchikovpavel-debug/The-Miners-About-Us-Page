@@ -53,7 +53,7 @@
   /* ---------------- awards · quotes · collab logos ---------------- */
   var MARKV = '4';
   $('#awardsList').innerHTML = D.awards.map(function (a) {
-    var badge = '<div class="awards__badge"><img src="Assets/marks/' + a.mark + '.svg?v=' + MARKV + '" alt="" loading="lazy"></div>';
+    var badge = '<div class="awards__badge"><img src="Assets/marks/' + a.mark + '.svg?v=' + MARKV + '" alt=""></div>';
     return '<li class="up"><i>' + badge + '<h3>' + a.t1 + '<br>' + a.t2 + '</h3>' +
       '<p' + (a.ph ? ' class="ph"' : '') + '>' + a.d + '</p></i></li>';
   }).join('');
@@ -65,7 +65,7 @@
       '<path d="M0 0 H9 L6 16.5 A1.5 1.5 0 0 1 3 16.5 Z"/>' +
       '<path d="M13 0 H22 L19 16.5 A1.5 1.5 0 0 1 16 16.5 Z"/>' +
       '</svg></span>';
-    var logo = '<img src="Assets/marks/' + p.mark + '.svg?v=' + MARKV + '" alt="' + p.outlet + '" loading="lazy">';
+    var logo = '<img src="Assets/marks/' + p.mark + '.svg?v=' + MARKV + '" alt="' + p.outlet + '">';
     var src = p.url ? '<a href="' + p.url + '" target="_blank" rel="noopener">' + logo + '</a>' : logo;
     return '<li class="up"><i>' +
       '<div class="quotes__top">' + mark + '<div class="quotes__src">' + src + '</div></div>' +
@@ -74,7 +74,7 @@
   }).join('');
 
   $('#logoGrid').innerHTML = D.collabs.map(function (c) {
-    return '<li><img src="Assets/logos/' + c + '.png?v=' + MARKV + '" alt="" loading="lazy"></li>';
+    return '<li><img src="Assets/logos/' + c + '.png?v=' + MARKV + '" alt=""></li>';
   }).join('');
 
   /* ============================================================
