@@ -373,21 +373,17 @@ h1,h2,h3,h4,p,dd,dt,figure{margin:0}
 /* ============================================================
    06 — collaborations, 3 × 3
    ============================================================ */
-.logos{display:grid;grid-template-columns:repeat(3,1fr);
-  border-bottom:var(--stroke-light) solid var(--hair)}
+.logos{display:grid;grid-template-columns:repeat(3,1fr)}
 .logos li{display:grid;place-items:center;padding:clamp(34px,4.6vw,66px) 20px;position:relative}
 .logos li::before{content:"";position:absolute;left:0;top:0;bottom:0;width:var(--stroke-light);background:var(--hair)}
 .logos li:nth-child(3n+1)::before{display:none}
 .logos li::after{content:"";position:absolute;left:0;right:0;top:0;height:var(--stroke-light);background:var(--hair)}
 .logos li:nth-child(-n+3)::after{display:none}
 .logos img{max-height:clamp(46px,5.8vw,88px);max-width:80%;width:auto;object-fit:contain}
-/* одинокий логотип в неполном последнем ряду закрывается сам:
-   верхняя линия на всю ширину, справа и снизу — по своей ячейке */
+/* одинокий логотип в неполном последнем ряду: верхняя линия на всю ширину
+   и дивайдер справа. Снизу линии нет — сетка не закрывается */
 .logos li:last-child:nth-child(3n+1)::after{right:-200%}
-.logos li:last-child:nth-child(3n+1){
-  border-right:var(--stroke-light) solid var(--hair);
-  border-bottom:var(--stroke-light) solid var(--hair)}
-.logos:has(li:last-child:nth-child(3n+1)){border-bottom:0}
+.logos li:last-child:nth-child(3n+1){border-right:var(--stroke-light) solid var(--hair)}
 
 /* ============================================================
    careers · instagram · footer
@@ -423,8 +419,12 @@ h1,h2,h3,h4,p,dd,dt,figure{margin:0}
 .ig__stats > div{display:flex;flex-direction:column;gap:12px}
 .ig__stats dt{font-size:var(--fs-body);font-weight:400;line-height:1}
 .ig__stats dd{margin:0;font-size:var(--fs-body);line-height:1}
-/* во фрейме у кнопки радиус карточки, а не кнопочный */
-.btn--ig{border-radius:var(--r-card)}
+/* кнопка ровно по фрейму: 12 × 32, кегль Button, интерлиньяж .9,
+   радиус карточки, а не кнопочный */
+.btn--ig{padding:12px 32px;line-height:.9;border-radius:var(--r-card)}
+/* приколотый пост — как в инстаграме и во фрейме */
+.ig__pin{position:absolute;top:10px;right:10px;width:18px;height:18px;
+  color:var(--white);pointer-events:none;z-index:1}
 .ig__grid{display:grid;grid-template-columns:repeat(4,1fr);gap:8px}
 .ig__grid a{position:relative;display:block;border-radius:var(--r-img);overflow:hidden}
 .ig__grid img{width:100%;aspect-ratio:3/4;object-fit:cover;transition:transform .7s var(--ease)}
@@ -535,14 +535,11 @@ h1,h2,h3,h4,p,dd,dt,figure{margin:0}
   /* правило для трёх колонок здесь не действует — на телефоне их две,
      иначе линия уезжает за экран и ломает ширину страницы */
   .logos li:last-child:nth-child(3n+1)::after{right:0}
-  .logos li:last-child:nth-child(3n+1){border-right:0;border-bottom:0}
-  .logos:has(li:last-child:nth-child(3n+1)){border-bottom:var(--stroke-light) solid var(--hair)}
+  .logos li:last-child:nth-child(3n+1){border-right:0}
   /* последний ряд неполный — его верхняя линия идёт на всю ширину */
   .logos li:last-child:nth-child(odd)::after{right:-100%}
-  /* одинокий последний логотип закрывается сам: линия справа и снизу по своей половине */
-  .logos{border-bottom:0}
-  .logos li:last-child:nth-child(odd){
-    border-right:var(--stroke-light) solid var(--hair)}
+  /* одинокий последний логотип: только дивайдер справа */
+  .logos li:last-child:nth-child(odd){border-right:var(--stroke-light) solid var(--hair)}
 
   /* ---- хайринг: фото отдельно, текст отдельно ---- */
   .careers{aspect-ratio:auto;min-height:0;display:block;overflow:visible;border-radius:0}
@@ -586,7 +583,8 @@ h1,h2,h3,h4,p,dd,dt,figure{margin:0}
     scroll-padding-left:var(--gut);
     scrollbar-width:none}
   .ig__grid::-webkit-scrollbar{display:none}
-  .ig__grid > li{flex:0 0 78%;scroll-snap-align:start}
+  /* во фрейме пост 294 из 327 полезной ширины */
+  .ig__grid > li{flex:0 0 90%;scroll-snap-align:start}
 
   /* ---- the revolver card: title over caption, not beside it ---- */
   .dcard__top{flex-direction:column;align-items:stretch;gap:10px}
