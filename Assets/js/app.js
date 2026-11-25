@@ -283,8 +283,15 @@
 
   function qpinGeo() {
     if (!qpin || !qcards.length) return;
+    // ширину клипа может быть ещё не видно на первом проходе — тогда считаем
+    // её от ряда, иначе проезд выйдет нулевым и секция не запинится
     var inner = qclip.clientWidth;
-    if (!inner) return;
+    if (!inner) {
+      var fr = qpin.querySelector('.qpin__frame'), fcs = fr && getComputedStyle(fr);
+      inner = fcs ? fr.clientWidth - parseFloat(fcs.paddingLeft) - parseFloat(fcs.paddingRight)
+                  : vw() - 2 * cssPx('--gut');
+    }
+    if (!(inner > 0)) inner = vw() - 2 * cssPx('--gut');
     var gap = parseFloat(getComputedStyle(qrow).columnGap) || 0;
     // на телефоне одна карточка с заглядывающей следующей, на десктопе три
     var w = narrow() ? Math.round(inner * .82) : Math.round((inner - gap * 2) / 3);

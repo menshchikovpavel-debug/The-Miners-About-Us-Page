@@ -336,14 +336,15 @@ h1,h2,h3,h4,p,dd,dt,figure{margin:0}
    так он гарантированно пролистывает все цитаты */
 .qpin{position:relative;z-index:1}
 .qpin__stick{position:sticky;top:0;height:100svh;display:flex;flex-direction:column;
-  justify-content:center;gap:var(--sp-1);padding:var(--hdr-solid) 0 var(--pad-sec-b)}
-.qpin__frame{overflow:visible}
-.qpin__clip{overflow:hidden}
+  gap:var(--sp-1);padding:var(--hdr-solid) 0 var(--pad-sec-b)}
+/* лента забирает всю высоту, что осталась от заголовка — панельки во весь экран */
+.qpin__frame{flex:1 1 auto;min-height:0;display:flex}
+.qpin__clip{overflow:hidden;flex:1 1 auto;min-width:0}
 
 /* карточка отзыва из системы (Figma · Academy_Mobile 4250:1810):
    панель, падинг 24, в верхней строке большая кавычка слева и логотип
    справа, ниже цитата. Логотип сидит в своём углу и не спорит с текстом */
-.quotes{display:flex;width:max-content;gap:var(--sp-2);
+.quotes{display:flex;width:max-content;height:100%;gap:var(--sp-2);
   align-items:stretch;will-change:transform}
 .quotes > li{flex:0 0 auto;background:var(--panel);color:var(--white)}
 .quotes > li > i{display:flex;flex-direction:column;gap:var(--sp-2);
