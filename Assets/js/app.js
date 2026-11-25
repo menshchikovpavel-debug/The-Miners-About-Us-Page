@@ -58,8 +58,7 @@
       '<p' + (a.ph ? ' class="ph"' : '') + '>' + a.d + '</p></i></li>';
   }).join('');
 
-  // шашками: каждая цитата на свою строку, сторону задаёт css по чётности
-  $('#pressList').innerHTML = D.press.map(function (p, i) {
+  $('#pressList').innerHTML = D.press.map(function (p) {
     // a drawn mark, not a glyph — 22 × 18 units, set to 32 px tall in CSS
     var mark = '<span class="quotes__m" aria-hidden="true">' +
       '<svg viewBox="0 0 22 18" fill="currentColor" role="presentation">' +
@@ -68,7 +67,7 @@
       '</svg></span>';
     var logo = '<img src="Assets/marks/' + p.mark + '.svg?v=' + MARKV + '" alt="' + p.outlet + '" loading="lazy">';
     var src = p.url ? '<a href="' + p.url + '" target="_blank" rel="noopener">' + logo + '</a>' : logo;
-    return '<li class="up" style="grid-row:' + (i + 1) + '"><i>' +
+    return '<li class="up"><i>' +
       mark + '<blockquote>' + p.quote + '</blockquote>' +
       '<div class="quotes__src">' + src + '</div></i></li>';
   }).join('');

@@ -334,12 +334,14 @@ h1,h2,h3,h4,p,dd,dt,figure{margin:0}
 #press .row{position:relative;z-index:1}
 #press .headrow{margin-bottom:var(--sp-1)}
 
-/* шашки: цитата прижата то к левому краю, то к правому. Блок шире половины
-   и спокойно заходит за середину — важна только сторона. Строку задаёт app.js */
+/* одна колонка, всё по левому краю; 40 между цитатами — просил Павел.
+   Ширину строки держит правило восьми слов (capLines) */
 .quotes{display:grid;grid-template-columns:minmax(0,1fr);
-  row-gap:var(--sp-1);position:relative}
-.quotes > li{width:66%;min-width:0;color:var(--white)}
-.quotes > li:nth-child(even){justify-self:end}
+  row-gap:40px;position:relative}
+.quotes > li{min-width:0;color:var(--white)}
+/* короткий дивайдер под логотипом, на том же расстоянии, что логотип от цитаты */
+.quotes > li > i::after{content:"";display:block;width:24px;height:var(--stroke-light);
+  background:var(--grey);margin-top:var(--sp-4)}
 .quotes > li > i{display:block}
 .sec--dark .quotes__m{color:var(--grey)}
 .quotes__m{display:block;line-height:0;margin-bottom:var(--sp-3);
