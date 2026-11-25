@@ -68,8 +68,9 @@
     var logo = '<img src="Assets/marks/' + p.mark + '.svg?v=' + MARKV + '" alt="' + p.outlet + '" loading="lazy">';
     var src = p.url ? '<a href="' + p.url + '" target="_blank" rel="noopener">' + logo + '</a>' : logo;
     return '<li class="up"><i>' +
-      mark + '<blockquote>' + p.quote + '</blockquote>' +
-      '<div class="quotes__src">' + src + '</div></i></li>';
+      '<div class="quotes__top">' + mark + '<div class="quotes__src">' + src + '</div></div>' +
+      '<blockquote>' + p.quote + '</blockquote>' +
+      '</i></li>';
   }).join('');
 
   $('#logoGrid').innerHTML = D.collabs.map(function (c) {

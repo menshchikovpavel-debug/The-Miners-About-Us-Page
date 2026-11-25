@@ -334,24 +334,27 @@ h1,h2,h3,h4,p,dd,dt,figure{margin:0}
 #press .row{position:relative;z-index:1}
 #press .headrow{margin-bottom:var(--sp-1)}
 
-/* одна колонка, всё по левому краю; 40 между цитатами — просил Павел.
-   Ширину строки держит правило восьми слов (capLines) */
-.quotes{display:grid;grid-template-columns:minmax(0,1fr);
-  row-gap:40px;position:relative}
-.quotes > li{min-width:0;color:var(--white)}
-/* короткий дивайдер под логотипом, на том же расстоянии, что логотип от цитаты */
-.quotes > li > i::after{content:"";display:block;width:24px;height:var(--stroke-light);
-  background:var(--grey);margin-top:var(--sp-4)}
-.quotes > li > i{display:block}
+/* карточка отзыва из системы (Figma · Academy_Mobile 4250:1810):
+   панель, падинг 24, в верхней строке большая кавычка слева и логотип
+   справа, ниже цитата. Логотип сидит в своём углу и не спорит с текстом */
+.quotes{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));
+  gap:var(--sp-2);position:relative}
+.quotes > li{background:var(--panel);min-width:0;color:var(--white)}
+.quotes > li > i{display:flex;flex-direction:column;gap:var(--sp-2);
+  height:100%;padding:var(--sp-2)}
+.quotes__top{display:flex;align-items:flex-start;justify-content:space-between;gap:16px}
 .sec--dark .quotes__m{color:var(--grey)}
-.quotes__m{display:block;line-height:0;margin-bottom:var(--sp-3);
+.quotes__m{display:block;line-height:0;flex:0 0 auto;
   color:var(--grey);transition:color .3s ease}
-.quotes__m svg{height:32px;width:auto;display:block}
-.quotes blockquote{margin:0;max-width:none;font-size:var(--fs-sub);font-weight:400;
+.quotes__m svg{height:48px;width:auto;display:block}
+/* карточки тянутся по самой высокой — прижимаем цитату к низу,
+   чтобы короткая не оставляла дыру под собой */
+.quotes blockquote{margin:auto 0 0;max-width:none;font-size:var(--fs-sub);font-weight:400;
   line-height:1.35;color:inherit}
-.quotes__src{display:flex;align-items:center;margin-top:var(--sp-4);min-height:0}
+.quotes__src{display:flex;align-items:flex-start;justify-content:flex-end;
+  flex:0 1 auto;min-width:0;margin:0}
 /* the marks are solid artwork — knocked out white, then held back until hover */
-.quotes__src img{width:auto;max-width:100%;object-fit:contain;object-position:left center;
+.quotes__src img{width:auto;max-width:100%;object-fit:contain;object-position:right top;
   opacity:.75;transition:opacity .3s ease}
 /* one optical size for a row of very different lockups */
 .quotes__src img[src*="monocle"],
@@ -500,7 +503,14 @@ h1,h2,h3,h4,p,dd,dt,figure{margin:0}
   .awards__badge{--badge:112px;margin-bottom:18px}
 
   /* ---- press: the mark sits on its quote, the quotes sit further apart ---- */
-  .quotes__m svg{height:24px}
+  /* карточки едут лентой, как во фрейме отзывов */
+  .quotes{display:flex;grid-template-columns:none;gap:var(--sp-2);overflow-x:auto;
+    scroll-snap-type:x mandatory;-webkit-overflow-scrolling:touch;
+    margin-inline:calc(-1 * var(--gut));padding:0 var(--gut) 10px;
+    scroll-padding-left:var(--gut);scrollbar-width:none}
+  .quotes::-webkit-scrollbar{display:none}
+  .quotes > li{flex:0 0 82%;scroll-snap-align:start}
+  .quotes__m svg{height:40px}
   .quotes__m{font-size:30px;line-height:.48;margin-bottom:2px}
   .quotes blockquote{max-width:none}
 
