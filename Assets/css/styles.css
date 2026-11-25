@@ -78,8 +78,8 @@
   --hdr-h:92px;          /* one height, start to finish */
   --hdr-solid:92px;
   /* Иерархия: от края — самое большое, глубже в группу — меньше */
-  --pad-sec:var(--gut);  /* сверху = боковому */
-  --pad-sec-b:120px;     /* снизу больше — перед следующей секцией */
+  --pad-sec:var(--gut);  /* сверху */
+  --pad-sec-b:var(--pad-sec);  /* снизу столько же; спейсинги внутри не больше */
   --sp-3:30px;           /* внутри пары «текст — подпись» */
   --sp-1:56px;           /* между крупными блоками секции */
   --sp-2:32px;           /* внутри группы */
@@ -325,25 +325,31 @@ h1,h2,h3,h4,p,dd,dt,figure{margin:0}
 /* ============================================================
    05 — press, as pull quotes on blue
    ============================================================ */
-#press{overflow:hidden;min-height:100svh;display:flex;flex-direction:column;justify-content:center}
-/* painted flat into the blue, underneath everything */
-.quotemark{position:absolute;right:4%;top:-5%;z-index:0;font-size:100vh;line-height:1;
+/* никакого overflow:hidden — он убил бы sticky внутри секции */
+#press{position:relative}
+/* painted flat into the black, underneath everything */
+.quotemark{position:absolute;right:4%;top:0;z-index:0;font-size:46vh;line-height:.8;
   font-weight:800;color:var(--cheap-glass);pointer-events:none;user-select:none}
 #press .row{position:relative;z-index:1}
-/* the heading sits exactly one row-gap above the first line of quotes */
 #press .headrow{margin-bottom:var(--sp-1)}
-.quotes{display:grid;grid-template-columns:repeat(3,1fr);
-  column-gap:var(--sp-1);row-gap:var(--sp-1);position:relative}
+
+/* вертикальный барабан: активная цитата крупная и белая, соседние —
+   мельче и тусклее. Размер даёт transform, кегель остаётся токеном */
+.qrev{position:relative;z-index:1}
+.qrev__stick{position:sticky;top:0;height:100svh;
+  padding:var(--hdr-solid) 0 var(--pad-sec-b)}
+.qrev__frame{height:100%}
+.quotes{position:relative;height:100%;display:block;margin:0;padding:0;list-style:none}
+.quotes > li{position:absolute;left:0;top:0;width:100%;max-width:46ch;color:var(--white);
+  transform-origin:left top;will-change:transform,opacity}
 .quotes > li > i{display:block}
-.sec--dark .quotes__m{color:var(--grey)}
-.quotes__m{display:block;line-height:0;margin-bottom:20px;
-  color:var(--grey);transition:color .3s ease}
+.quotes__m{display:block;line-height:0;margin-bottom:var(--sp-3);color:inherit}
 .quotes__m svg{height:32px;width:auto;display:block}
-.quotes blockquote{margin:0;max-width:26ch;font-size:var(--fs-sub);font-weight:400;line-height:1.35}
+.quotes blockquote{margin:0;max-width:none;font-size:var(--fs-sub);font-weight:400;
+  line-height:1.35;color:inherit}
 .quotes__src{display:flex;align-items:center;margin-top:var(--sp-3);min-height:46px}
 /* the marks are solid artwork — knocked out white, then held back until hover */
-.quotes__src img{width:auto;max-width:230px;object-fit:contain;object-position:left center;
-  opacity:.75;transition:opacity .3s ease}
+.quotes__src img{width:auto;max-width:230px;object-fit:contain;object-position:left center}
 /* one optical size for a row of very different lockups */
 .quotes__src img[src*="monocle"],
 .quotes__src img[src*="standart"],
@@ -351,8 +357,7 @@ h1,h2,h3,h4,p,dd,dt,figure{margin:0}
 .quotes__src img[src*="forbes"]{height:25px}
 .quotes__src img[src*="wcp"]{height:22px}
 .quotes__src img[src*="arquitectura"]{height:31px}
-.sec--dark .quotes > li:hover .quotes__m{color:var(--on-accent)}
-.quotes > li:hover .quotes__src img{opacity:1}
+/* яркость задаёт барабан в app.js, поэтому hover здесь ничего не красит */
 
 /* ============================================================
    06 — collaborations, 3 × 3
@@ -420,7 +425,6 @@ h1,h2,h3,h4,p,dd,dt,figure{margin:0}
 @media (max-width:1280px){
   :root{--gut:40px;--hdr-h:78px;--hdr-solid:78px}
   .ig__grid{grid-template-columns:repeat(2,minmax(0,1fr))}
-  .quotes{grid-template-columns:repeat(2,minmax(0,1fr))}
 }
 @media (max-width:1080px){
   .hdr__sel,.hdr__nav{display:none}
@@ -432,7 +436,7 @@ h1,h2,h3,h4,p,dd,dt,figure{margin:0}
 @media (max-width:760px){
   :root{--gut:24px;--hdr-h:64px;--hdr-solid:64px;
     --r-sec:var(--r-card);   /* на телефоне секция скругляется как карточка — 16 */
-    --nums-gap:80px;         /* шаг между большими цифрами, из мобильного фрейма */
+    --nums-gap:40px;         /* шаг между цифрами — не больше поля секции */
 
     /* Figma · Typography, Mobile column. fitHeads() shrinks a heading only
        when its own longest word would not fit the gutter, so nothing overruns. */
@@ -450,9 +454,9 @@ h1,h2,h3,h4,p,dd,dt,figure{margin:0}
     --fs-bigbtn:20px;
     --ladder:288 152 96 64 48 40 24 20 16;
 
-    /* сверху = сбоку; спейсинги внутри крупнее; снизу больше любого из них */
-    --pad-sec:var(--gut);  /* сверху = боковому, 24 */
-    --pad-sec-b:96px;      /* снизу больше самого большого спейсинга (80 у цифр) */
+    /* поле секции 40 сверху и снизу; ни один спейсинг внутри не больше 40 */
+    --pad-sec:40px;
+    --pad-sec-b:var(--pad-sec);
     --sp-1:40px;
     --sp-2:24px;
     --sp-3:18px;
@@ -491,8 +495,8 @@ h1,h2,h3,h4,p,dd,dt,figure{margin:0}
   .awards__badge{--badge:112px;margin-bottom:18px}
 
   /* ---- press: the mark sits on its quote, the quotes sit further apart ---- */
-  .quotes{grid-template-columns:minmax(0,1fr);row-gap:var(--sp-1)}
   .quotes__m svg{height:24px}
+  .qrev{margin-top:calc(-1 * var(--hdr-solid))}
   .quotes__m{font-size:30px;line-height:.48;margin-bottom:2px}
   .quotes blockquote{max-width:none}
   .quotes__src{margin-top:var(--sp-3)}
