@@ -332,14 +332,20 @@ h1,h2,h3,h4,p,dd,dt,figure{margin:0}
 .quotemark{position:absolute;right:4%;top:0;z-index:0;font-size:46vh;line-height:.8;
   font-weight:800;color:var(--cheap-glass);pointer-events:none;user-select:none}
 #press .row{position:relative;z-index:1}
-#press .headrow{margin-bottom:var(--sp-1)}
+/* секция пинится, и лента карточек едет вбок, пока человек крутит вниз —
+   так он гарантированно пролистывает все цитаты */
+.qpin{position:relative;z-index:1}
+.qpin__stick{position:sticky;top:0;height:100svh;display:flex;flex-direction:column;
+  justify-content:center;gap:var(--sp-1);padding:var(--hdr-solid) 0 var(--pad-sec-b)}
+.qpin__frame{overflow:visible}
+.qpin__clip{overflow:hidden}
 
 /* карточка отзыва из системы (Figma · Academy_Mobile 4250:1810):
    панель, падинг 24, в верхней строке большая кавычка слева и логотип
    справа, ниже цитата. Логотип сидит в своём углу и не спорит с текстом */
-.quotes{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));
-  gap:var(--sp-2);position:relative}
-.quotes > li{background:var(--panel);min-width:0;color:var(--white)}
+.quotes{display:flex;width:max-content;gap:var(--sp-2);
+  align-items:stretch;will-change:transform}
+.quotes > li{flex:0 0 auto;background:var(--panel);color:var(--white)}
 .quotes > li > i{display:flex;flex-direction:column;gap:var(--sp-2);
   height:100%;padding:var(--sp-2)}
 .quotes__top{display:flex;align-items:flex-start;justify-content:space-between;gap:16px}
@@ -503,13 +509,6 @@ h1,h2,h3,h4,p,dd,dt,figure{margin:0}
   .awards__badge{--badge:112px;margin-bottom:18px}
 
   /* ---- press: the mark sits on its quote, the quotes sit further apart ---- */
-  /* карточки едут лентой, как во фрейме отзывов */
-  .quotes{display:flex;grid-template-columns:none;gap:var(--sp-2);overflow-x:auto;
-    scroll-snap-type:x mandatory;-webkit-overflow-scrolling:touch;
-    margin-inline:calc(-1 * var(--gut));padding:0 var(--gut) 10px;
-    scroll-padding-left:var(--gut);scrollbar-width:none}
-  .quotes::-webkit-scrollbar{display:none}
-  .quotes > li{flex:0 0 82%;scroll-snap-align:start}
   .quotes__m svg{height:40px}
   .quotes__m{font-size:30px;line-height:.48;margin-bottom:2px}
   .quotes blockquote{max-width:none}

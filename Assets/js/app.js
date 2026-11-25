@@ -273,6 +273,36 @@
   }
 
   /* ============================================================
+     press — секция пинится, лента цитат едет вбок, пока крутят вниз
+     ============================================================ */
+  var qpin = $('#qpin');
+  var qclip = qpin && qpin.querySelector('.qpin__clip');
+  var qrow = $('#pressList');
+  var qcards = qrow ? [].slice.call(qrow.children) : [];
+  var qTravel = 0;
+
+  function qpinGeo() {
+    if (!qpin || !qcards.length) return;
+    var inner = qclip.clientWidth;
+    if (!inner) return;
+    var gap = parseFloat(getComputedStyle(qrow).columnGap) || 0;
+    // на телефоне одна карточка с заглядывающей следующей, на десктопе три
+    var w = narrow() ? Math.round(inner * .82) : Math.round((inner - gap * 2) / 3);
+    qcards.forEach(function (c) { c.style.width = w + 'px'; });
+    qTravel = Math.max(0, qcards.length * w + gap * (qcards.length - 1) - inner);
+    // один пиксель вертикали — один пиксель горизонтали
+    qpin.style.height = (vh() + qTravel) + 'px';
+  }
+
+  function qpinFrame() {
+    if (!qpin || !qcards.length) return;
+    var r = qpin.getBoundingClientRect(), runway = r.height - vh();
+    if (runway <= 0) { qrow.style.transform = ''; return; }
+    var p = clamp(-r.top / runway, 0, 1);
+    qrow.style.transform = 'translateX(' + (-p * qTravel).toFixed(1) + 'px)';
+  }
+
+  /* ============================================================
      timeline — a scroll list with a live scrollbar
      ============================================================ */
   var tlist = $('#tlist'), tbar = $('#tlistBar'), tthumb = $('#tlistThumb');
@@ -530,6 +560,7 @@
     measureNums();
     listRows();
     drumGeo();
+    qpinGeo();
     heroLines();
     fitHeads();
     levelHeads('.dcard__t');
@@ -541,7 +572,7 @@
   function frameTick() {
     lastFrame = performance.now();
     try {
-      revealFrame(); numsFrame(); drumFrame(); listFrame(); hdrState();
+      revealFrame(); numsFrame(); drumFrame(); qpinFrame(); listFrame(); hdrState();
     } finally {
       ticking = false;          // a throw must never strand the loop
     }
