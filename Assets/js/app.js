@@ -181,7 +181,7 @@
       // белая секция, наезжающая на панель
       var gutN = cssPx('--gut'), lapN = cssPx('--lap');
       numsRow.style.paddingTop = gutN + 'px';
-      numsRow.style.paddingBottom = (gutN + lapN) + 'px';
+      numsRow.style.paddingBottom = (cssPx('--pad-sec-b') + lapN) + 'px';
       numsRow.style.rowGap = cssPx('--nums-gap') + 'px';
       return;
     }

@@ -78,7 +78,7 @@
   --hdr-h:92px;          /* one height, start to finish */
   --hdr-solid:92px;
   /* Иерархия: от края — самое большое, глубже в группу — меньше */
-  --pad-sec:var(--gut);  /* поле секции сверху = боковому */
+  --pad-sec:var(--gut);  /* сверху = боковому */
   --pad-sec-b:120px;     /* снизу больше — перед следующей секцией */
   --sp-3:30px;           /* внутри пары «текст — подпись» */
   --sp-1:56px;           /* между крупными блоками секции */
@@ -426,7 +426,7 @@ h1,h2,h3,h4,p,dd,dt,figure{margin:0}
   .hdr__sel,.hdr__nav{display:none}
   .burger{display:block}
   .hdr__tools{margin-left:auto}
-  .headrow,.story{grid-template-columns:minmax(0,1fr);row-gap:20px}
+  .headrow,.story{grid-template-columns:minmax(0,1fr);row-gap:var(--sp-1)}
   .var__tag{position:static;display:inline-block;margin-bottom:12px}
 }
 @media (max-width:760px){
@@ -450,12 +450,12 @@ h1,h2,h3,h4,p,dd,dt,figure{margin:0}
     --fs-bigbtn:20px;
     --ladder:288 152 96 64 48 40 24 20 16;
 
-    /* иерархия: поле секции > между блоками > внутри группы */
-    --pad-sec:32px;        /* сверху */
-    --pad-sec-b:56px;      /* снизу больше — перед следующей секцией */
-    --sp-1:24px;
-    --sp-2:14px;
-    --sp-3:10px;
+    /* сверху = сбоку; спейсинги внутри крупнее; снизу больше любого из них */
+    --pad-sec:var(--gut);  /* сверху = боковому, 24 */
+    --pad-sec-b:96px;      /* снизу больше самого большого спейсинга (80 у цифр) */
+    --sp-1:40px;
+    --sp-2:24px;
+    --sp-3:18px;
 
     /* Figma · Button padding, Mobile column */
     --btn-px:24px;    --btn-py:16px;
@@ -491,10 +491,8 @@ h1,h2,h3,h4,p,dd,dt,figure{margin:0}
   .awards__badge{--badge:112px;margin-bottom:18px}
 
   /* ---- press: the mark sits on its quote, the quotes sit further apart ---- */
-  .quotes{grid-template-columns:minmax(0,1fr);row-gap:0}
-  .quotes > li{padding-block:var(--sp-2);border-top:var(--stroke-light) solid var(--hair)}
-  .quotes > li:first-child{padding-top:0;border-top:0}
-  .quotes > li:last-child{padding-bottom:0}
+  .quotes{grid-template-columns:minmax(0,1fr);row-gap:var(--sp-1)}
+  .quotes__m svg{height:24px}
   .quotes__m{font-size:30px;line-height:.48;margin-bottom:2px}
   .quotes blockquote{max-width:none}
   .quotes__src{margin-top:var(--sp-3)}
@@ -511,8 +509,7 @@ h1,h2,h3,h4,p,dd,dt,figure{margin:0}
   /* одинокий последний логотип закрывается сам: линия справа и снизу по своей половине */
   .logos{border-bottom:0}
   .logos li:last-child:nth-child(odd){
-    border-right:var(--stroke-light) solid var(--hair);
-    border-bottom:var(--stroke-light) solid var(--hair)}
+    border-right:var(--stroke-light) solid var(--hair)}
 
   /* ---- хайринг: фото отдельно, текст отдельно ---- */
   .careers{aspect-ratio:auto;min-height:0;display:block;overflow:visible;border-radius:0}
@@ -533,20 +530,21 @@ h1,h2,h3,h4,p,dd,dt,figure{margin:0}
 
   .tlist{grid-template-columns:5px minmax(0,1fr);column-gap:14px}
   .tlist__bar{grid-column:1;grid-row:1/-1}
-  .tlist__t{grid-column:2;padding-bottom:18px;
+  .tlist__t{grid-column:2;padding-bottom:var(--sp-2);
     display:flex;align-items:last baseline;justify-content:space-between;gap:var(--sp-2)}
   .tlist__t h3{font-size:var(--fs-lsub);flex:1 1 auto;min-width:0}
   .tlist__t b{flex:0 0 auto;margin-top:0}
   .tlist__t p{max-width:none}
-  .tlist__row{grid-column:2;padding-bottom:var(--gut)}
+  .tlist__row{grid-column:2;padding-bottom:var(--sp-1)}
   /* фото уходит во флоат, текст его обнимает */
   .tlist__row > i{display:block}
   .tlist__row > i::after{content:"";display:block;clear:both}
   .tlist__row img{float:right;width:46%;aspect-ratio:4/3;margin:4px 0 8px var(--sp-2)}
   /* линейка больше не висит над текстом — она отделяет один год от другого */
   .tlist__row .tx{border-top:0;padding-top:0}
-  .tlist__t{border-top:var(--stroke-light) solid var(--hair);padding-top:var(--gut)}
-  .tlist__t:first-of-type{border-top:0;padding-top:0}
+  .tlist__t{border-top:var(--stroke-light) solid var(--hair);padding-top:var(--sp-1)}
+  /* :first-of-type не сработает — первым DIV в .tlist лежит рельса */
+  .tlist__bar + .tlist__t{border-top:0;padding-top:0}
 
   /* ---- instagram: a swipeable strip instead of an endless column ---- */
   .ig__grid{display:flex;grid-template-columns:none;gap:12px;overflow-x:auto;
