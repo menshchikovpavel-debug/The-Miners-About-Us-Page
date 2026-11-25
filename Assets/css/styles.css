@@ -409,8 +409,9 @@ h1,h2,h3,h4,p,dd,dt,figure{margin:0}
    три счётчика числом над подписью, кнопка под ними слева */
 .ig__head > i{display:flex;flex-direction:column;align-items:flex-start;gap:22px;margin-bottom:20px}
 .ig__row{display:flex;align-items:flex-start;gap:22px;width:100%;max-width:520px}
-.ig__av{width:68px;height:68px;border-radius:999px;background:var(--ink);color:var(--white);
-  display:grid;place-items:center;flex:0 0 auto}
+/* настоящая аватарка профиля из фрейма — стрелка в ней упирается в края */
+.ig__av{width:68px;height:68px;border-radius:999px;background:var(--ink);
+  object-fit:cover;flex:0 0 auto;display:block}
 .ig__id{flex:1 1 auto;min-width:0;display:flex;flex-direction:column;gap:22px}
 .ig__name{display:flex;align-items:center;gap:2px;font-size:var(--fs-body)}
 .ig__name b{font-weight:400}

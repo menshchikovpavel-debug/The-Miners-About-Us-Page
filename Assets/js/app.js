@@ -51,7 +51,7 @@
   }
 
   /* ---------------- awards · quotes · collab logos ---------------- */
-  var MARKV = '3';
+  var MARKV = '4';
   $('#awardsList').innerHTML = D.awards.map(function (a) {
     var badge = '<div class="awards__badge"><img src="Assets/marks/' + a.mark + '.svg?v=' + MARKV + '" alt="" loading="lazy"></div>';
     return '<li class="up"><i>' + badge + '<h3>' + a.t1 + '<br>' + a.t2 + '</h3>' +
@@ -74,7 +74,7 @@
   }).join('');
 
   $('#logoGrid').innerHTML = D.collabs.map(function (c) {
-    return '<li><img src="Assets/logos/' + c + '.png" alt="" loading="lazy"></li>';
+    return '<li><img src="Assets/logos/' + c + '.png?v=' + MARKV + '" alt="" loading="lazy"></li>';
   }).join('');
 
   /* ============================================================
