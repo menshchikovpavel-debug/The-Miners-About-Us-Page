@@ -81,6 +81,7 @@
   --pad-sec:var(--gut);  /* сверху */
   --pad-sec-b:var(--pad-sec);  /* снизу столько же; спейсинги внутри не больше */
   --sp-3:30px;           /* внутри пары «текст — подпись» */
+  --sp-4:14px;           /* логотип издания под цитатой */
   --sp-1:56px;           /* между крупными блоками секции */
   --sp-2:32px;           /* внутри группы */
   --ease:cubic-bezier(.4,0,.2,1);
@@ -346,7 +347,7 @@ h1,h2,h3,h4,p,dd,dt,figure{margin:0}
 .quotes__m svg{height:32px;width:auto;display:block}
 .quotes blockquote{margin:0;max-width:none;font-size:var(--fs-sub);font-weight:400;
   line-height:1.35;color:inherit}
-.quotes__src{display:flex;align-items:center;margin-top:var(--sp-3);min-height:46px}
+.quotes__src{display:flex;align-items:center;margin-top:var(--sp-4);min-height:0}
 /* the marks are solid artwork — knocked out white, then held back until hover */
 .quotes__src img{width:auto;max-width:100%;object-fit:contain;object-position:left center;
   opacity:.75;transition:opacity .3s ease}
@@ -461,6 +462,7 @@ h1,h2,h3,h4,p,dd,dt,figure{margin:0}
     --sp-1:40px;
     --sp-2:24px;
     --sp-3:18px;
+    --sp-4:8px;
 
     /* Figma · Button padding, Mobile column */
     --btn-px:24px;    --btn-py:16px;
@@ -499,7 +501,6 @@ h1,h2,h3,h4,p,dd,dt,figure{margin:0}
   .quotes__m svg{height:24px}
   .quotes__m{font-size:30px;line-height:.48;margin-bottom:2px}
   .quotes blockquote{max-width:none}
-  .quotes__src{margin-top:var(--sp-3)}
 
   /* ---- collaborations: unbroken rules on a two-track grid ---- */
   .logos{grid-template-columns:repeat(2,minmax(0,1fr))}
