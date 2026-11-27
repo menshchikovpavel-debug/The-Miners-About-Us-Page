@@ -185,8 +185,9 @@ h1,h2,h3,h4,p,dd,dt,figure{margin:0}
    sections — full bleed, each rides 40 px over the one above
    ============================================================ */
 .sec{position:relative;border-radius:var(--r-sec) var(--r-sec) 0 0;margin-top:calc(-1 * var(--lap));
-  padding-top:var(--pad-sec);
-  /* следующая секция съедает --lap снизу — компенсируем, чтобы видимое поле равнялось --pad-sec-b */
+  /* секция наезжает на предыдущую на --lap, а следующая съедает --lap снизу —
+     компенсируем с обеих сторон, чтобы видимые поля равнялись токенам */
+  padding-top:calc(var(--pad-sec) + var(--lap));
   padding-bottom:calc(var(--pad-sec-b) + var(--lap))}
 .sec--white{background:var(--white)}
 .sec--light{background:var(--light)}
@@ -339,11 +340,11 @@ h1,h2,h3,h4,p,dd,dt,figure{margin:0}
 /* карточка отзыва из системы (Figma · Academy_Mobile 4250:1810):
    панель, падинг 24, в верхней строке большая кавычка слева и логотип
    справа, ниже цитата. Логотип сидит в своём углу и не спорит с текстом */
+/* без серой панели — цитаты стоят прямо на чёрном, по сетке секции */
 .quotes{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));
-  gap:var(--sp-2);align-items:stretch}
-.quotes > li{background:var(--panel);color:var(--white);min-width:0}
-.quotes > li > i{display:flex;flex-direction:column;gap:var(--sp-2);
-  height:100%;padding:var(--sp-2)}
+  gap:var(--sp-1);align-items:stretch}
+.quotes > li{color:var(--white);min-width:0}
+.quotes > li > i{display:flex;flex-direction:column;gap:var(--sp-2);height:100%}
 .quotes__top{display:flex;align-items:flex-start;justify-content:space-between;gap:16px}
 .quotes__m{display:block;line-height:0;flex:0 0 auto;color:var(--white)}
 .quotes__m svg{height:32px;width:auto;display:block}
@@ -524,8 +525,11 @@ h1,h2,h3,h4,p,dd,dt,figure{margin:0}
   .qpin__frame{flex:1 1 auto;min-height:0;display:flex}
   .qpin__clip{overflow:hidden;flex:1 1 auto;min-width:0}
   .quotes{display:flex;grid-template-columns:none;width:max-content;height:100%;
-    will-change:transform}
-  .quotes > li{flex:0 0 auto}
+    gap:var(--sp-2);will-change:transform}
+  /* на телефоне лента режет карточки краем — без подложки срез выглядит
+     сломанным, поэтому панель здесь остаётся */
+  .quotes > li{flex:0 0 auto;background:var(--panel)}
+  .quotes > li > i{padding:var(--sp-2)}
   .quotes__m svg{height:24px}
   .quotes__m{font-size:30px;line-height:.48;margin-bottom:2px}
   .quotes blockquote{max-width:none}

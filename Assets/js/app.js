@@ -179,10 +179,10 @@
       });
       nEls.forEach(function (e) { e.style.marginBottom = ''; e.style.marginLeft = ''; });
       lEls.forEach(function (e) { e.style.marginLeft = ''; });
-      // поле сверху равно боковому; снизу добавляем --lap, который съест
-      // белая секция, наезжающая на панель
+      // панель наезжает на предыдущую секцию и её саму съедает следующая —
+      // добавляем --lap с обеих сторон, чтобы видимые поля равнялись токенам
       var lapN = cssPx('--lap');
-      numsRow.style.paddingTop = cssPx('--pad-sec') + 'px';
+      numsRow.style.paddingTop = (cssPx('--pad-sec') + lapN) + 'px';
       numsRow.style.paddingBottom = (cssPx('--pad-sec-b') + lapN) + 'px';
       numsRow.style.rowGap = cssPx('--nums-gap') + 'px';
       return;
