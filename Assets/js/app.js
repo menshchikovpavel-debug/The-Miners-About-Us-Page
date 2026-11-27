@@ -283,6 +283,14 @@
 
   function qpinGeo() {
     if (!qpin || !qcards.length) return;
+    // пин и горизонтальная лента — только телефон; на десктопе секция обычная
+    if (!narrow()) {
+      qpin.style.height = '';
+      qrow.style.transform = '';
+      qcards.forEach(function (c) { c.style.width = ''; });
+      qTravel = 0;
+      return;
+    }
     // ширину клипа может быть ещё не видно на первом проходе — тогда считаем
     // её от ряда, иначе проезд выйдет нулевым и секция не запинится
     var inner = qclip.clientWidth;
@@ -302,7 +310,7 @@
   }
 
   function qpinFrame() {
-    if (!qpin || !qcards.length) return;
+    if (!qpin || !qcards.length || !qTravel) return;
     var r = qpin.getBoundingClientRect(), runway = r.height - vh();
     if (runway <= 0) { qrow.style.transform = ''; return; }
     var p = clamp(-r.top / runway, 0, 1);

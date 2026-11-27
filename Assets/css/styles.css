@@ -79,7 +79,7 @@
   --hdr-solid:92px;
   /* Иерархия: от края — самое большое, глубже в группу — меньше */
   --pad-sec:var(--gut);  /* сверху */
-  --pad-sec-b:var(--pad-sec);  /* снизу столько же; спейсинги внутри не больше */
+  --pad-sec-b:120px;     /* снизу 120, как во фрейме; сверху и по бокам 80 */
   --sp-3:30px;           /* внутри пары «текст — подпись» */
   --sp-4:14px;           /* логотип издания под цитатой */
   --sp-1:56px;           /* между крупными блоками секции */
@@ -332,21 +332,16 @@ h1,h2,h3,h4,p,dd,dt,figure{margin:0}
 .quotemark{position:absolute;right:4%;top:0;z-index:0;font-size:46vh;line-height:.8;
   font-weight:800;color:var(--cheap-glass);pointer-events:none;user-select:none}
 #press .row{position:relative;z-index:1}
-/* секция пинится, и лента карточек едет вбок, пока человек крутит вниз —
-   так он гарантированно пролистывает все цитаты */
+/* на десктопе секция обычная: заголовок и сетка карточек */
 .qpin{position:relative;z-index:1}
-.qpin__stick{position:sticky;top:0;height:100svh;display:flex;flex-direction:column;
-  gap:var(--sp-1);padding:var(--hdr-solid) 0 var(--pad-sec-b)}
-/* лента забирает всю высоту, что осталась от заголовка — панельки во весь экран */
-.qpin__frame{flex:1 1 auto;min-height:0;display:flex}
-.qpin__clip{overflow:hidden;flex:1 1 auto;min-width:0}
+.qpin__stick{display:flex;flex-direction:column;gap:var(--sp-1)}
 
 /* карточка отзыва из системы (Figma · Academy_Mobile 4250:1810):
    панель, падинг 24, в верхней строке большая кавычка слева и логотип
    справа, ниже цитата. Логотип сидит в своём углу и не спорит с текстом */
-.quotes{display:flex;width:max-content;height:100%;gap:var(--sp-2);
-  align-items:stretch;will-change:transform}
-.quotes > li{flex:0 0 auto;background:var(--panel);color:var(--white)}
+.quotes{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));
+  gap:var(--sp-2);align-items:stretch}
+.quotes > li{background:var(--panel);color:var(--white);min-width:0}
 .quotes > li > i{display:flex;flex-direction:column;gap:var(--sp-2);
   height:100%;padding:var(--sp-2)}
 .quotes__top{display:flex;align-items:flex-start;justify-content:space-between;gap:16px}
@@ -522,6 +517,15 @@ h1,h2,h3,h4,p,dd,dt,figure{margin:0}
   .awards__badge{--badge:112px;margin-bottom:18px}
 
   /* ---- press: the mark sits on its quote, the quotes sit further apart ---- */
+  /* телефон: секция пинится, лента карточек едет вбок на вертикальном скролле */
+  .qpin{margin-top:calc(-1 * var(--hdr-solid))}
+  .qpin__stick{position:sticky;top:0;height:100svh;
+    padding:var(--hdr-solid) 0 var(--pad-sec-b)}
+  .qpin__frame{flex:1 1 auto;min-height:0;display:flex}
+  .qpin__clip{overflow:hidden;flex:1 1 auto;min-width:0}
+  .quotes{display:flex;grid-template-columns:none;width:max-content;height:100%;
+    will-change:transform}
+  .quotes > li{flex:0 0 auto}
   .quotes__m svg{height:24px}
   .quotes__m{font-size:30px;line-height:.48;margin-bottom:2px}
   .quotes blockquote{max-width:none}
